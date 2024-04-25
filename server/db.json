@@ -1,15 +1,79 @@
 {
   "agents": [
     {
-      "id": "U202218227",
-      "username": "mku64"
+      "id": "u202111654",
+      "email": "u202111654@upc.edu.pe",
+      "username" : "Julio Elsner",
+      "password" : "trif123",
+      "pendingProjects_id": [
+        "PJ5757"
+      ],
+      "dueDiligenceProjects_id": [
+        "PJ2122"
+      ]
+    },
+    {
+      "id": "u202218227",
+      "email": "u202218227@upc.edu.pe",
+      "username" : "Luis Eduardo Herrera",
+      "password" : "la-sexta-es-inevitable123",
+      "pendingProjects_id": [
+        "PJ5757"
+      ],
+      "dueDiligenceProjects_id": [
+        "PJ2122"
+      ]
     }
   ],
-
-  "pending_projects": [
+  "agentProjectInvitation": [
     {
-      "id": "abcdefg",
-      "projectName": "Project Gloria"
+      "user_id": "u202111654",
+      "project_id": "PJ5757",
+      "confirmation": true
+    },
+    {
+      "user_id": "u202218227",
+      "project_id": "PJ5757",
+      "confirmation": false
+    }
+  ],
+  "pendingProjects": [
+    {
+      "id": "PJ5757",
+      "name": "Project Pepsi",
+      "date_published": "01-04-2024"
+    },
+    {
+      "id": "PJ1818",
+      "username": "Project Acabado",
+      "date_published": "05-03-2024"
+    }
+  ],
+  "dueDiligenceProjects": [
+    {
+      "id": "PJ2122",
+      "name": "Project Gloria",
+      "date_published": "10-02-2023",
+      "date_edited": "10-03-2023",
+      "informationStorage_id": "IR21832",
+      "QandAStorage_id": "QA18173",
+      "sell_Side_agents_id": [
+        "u202111654"
+      ],
+      "buy_Side_agents_id": [
+        "u202218227"
+      ]
+    }
+  ],
+  "informationStorage": [
+    {
+      "id": "IR21832",
+      "areas_directory": [
+        "IR21832/Financial",
+        "IR21832/Legal",
+        "IR21832/Tax",
+        "IR21832/Operational"
+      ]
     }
   ]
 }
