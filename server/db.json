@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "id": "U202218227",
+      "username": "mku64"
+    }
+  ],
+
+  "pending_projects": [
+    {
+      "id": "abcdefg",
+      "projectName": "Project Gloria"
+    }
+  ]
+}
