@@ -14,6 +14,7 @@ Single-Page Application for the DiligenceTech solution, a data-storage software 
 - JSON-Server: https://github.com/typicode/json-server/tree/v0
 - PrimeVue: 
 - PrimeIcons: 
+- PrimeFlex: 
 
 ## Recommended IDE Setup
 
