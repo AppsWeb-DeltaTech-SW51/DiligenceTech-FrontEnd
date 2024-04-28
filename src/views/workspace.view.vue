@@ -11,6 +11,8 @@ export default {
       // Routes
       items: [
         { label: "Due Diligence", to: "/workspace/due_diligence" },
+        { label: "Q&A", to: "/workspace/due_diligence" },
+        { label: "Settings", to: "/workspace/due_diligence" },
       ],
       // Data from Database
       agents: [],
@@ -81,10 +83,8 @@ export default {
       </template>
     </pv-toolbar>
   </header>
-  <!-- La posición del Dashboard con el RouterView es por esta parte -->
-  <div class="workspace">
-    <!-- El Dashboard trata de esta parte -->
-    <div class="dashboard bg-primary">
+  <pv-toolbar class="bg-blue-700">
+    <template #start>
       <div class="flex-column">
         <router-link
             v-for="item in items"
@@ -99,15 +99,11 @@ export default {
           >{{item.label}}</pv-button>
         </router-link>
       </div>
-    </div>
-    <!-- Fin Dashboard -->
-    <RouterView />
-  </div>
-  <!-- Fin de la posicion del Dashboard y RouterView -->
+    </template>
+  </pv-toolbar>
+  <RouterView />
 </template>
 
 <style scoped>
-.workspace {
-  display: flex;
-}
+
 </style>
