@@ -1,17 +1,16 @@
 <script>
-
-import {AgentsApiService} from "./shared/services/agents-api.service.js";
-import {DueDiligenceProjectsApiService} from "./due-diligence/services/due-diligence-projects-api.service.js";
-import {PendingProjectsApiService} from "./pending-projects/services/pending-projects-api.service.js";
+import {DueDiligenceProjectsApiService} from "../due-diligence/services/due-diligence-projects-api.service.js";
+import {AgentsApiService} from "../shared/services/agents-api.service.js";
+import {PendingProjectsApiService} from "../pending-projects/services/pending-projects-api.service.js";
 
 export default {
-  name: "App",
+  name: "workspace",
   components: {},
   data() {
     return {
       // Routes
       items: [
-        { label: "My Projects", to: "/my-projects" },
+        { label: "Due Diligence", to: "/workspace/due_diligence" },
       ],
       // Data from Database
       agents: [],
@@ -71,10 +70,44 @@ export default {
 </script>
 
 <template>
-  <pv-toast /> <!-- Don't know if i can remove it -->
-  <RouterView />
+  <pv-toast />
+  <header>
+    <pv-toolbar class="bg-gray-900">
+      <template #start>
+        <img width="70" class="p-image-toolbar" src="../assets/images/DiligenceTechImage.png">
+        <h3 class="text-white">DiligenceTech</h3>
+      </template>
+      <template #end>
+      </template>
+    </pv-toolbar>
+  </header>
+  <!-- La posición del Dashboard con el RouterView es por esta parte -->
+  <div class="workspace">
+    <!-- El Dashboard trata de esta parte -->
+    <div class="dashboard bg-primary">
+      <div class="flex-column">
+        <router-link
+            v-for="item in items"
+            :to="item.to"
+            custom
+            v-slot="{navigate, href}"
+            :key="item.label"
+        >
+          <pv-button
+              :href="href"
+              @click="navigate"
+          >{{item.label}}</pv-button>
+        </router-link>
+      </div>
+    </div>
+    <!-- Fin Dashboard -->
+    <RouterView />
+  </div>
+  <!-- Fin de la posicion del Dashboard y RouterView -->
 </template>
 
 <style scoped>
-
+.workspace {
+  display: flex;
+}
 </style>
