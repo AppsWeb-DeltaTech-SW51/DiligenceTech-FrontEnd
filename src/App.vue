@@ -1,7 +1,7 @@
 <script>
 
 import {AgentsApiService} from "./shared/services/agents-api.service.js";
-import {DueDiligenceProjectsApiService} from "./due-diligence-project/services/due-diligence-projects-api.service.js";
+import {DueDiligenceProjectsApiService} from "./due-diligence/services/due-diligence-projects-api.service.js";
 import {PendingProjectsApiService} from "./pending-projects/services/pending-projects-api.service.js";
 
 export default {

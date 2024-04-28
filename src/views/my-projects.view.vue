@@ -1,5 +1,5 @@
 <script>
-import {DueDiligenceProjectsApiService} from "../due-diligence-project/services/due-diligence-projects-api.service.js";
+import {DueDiligenceProjectsApiService} from "../due-diligence/services/due-diligence-projects-api.service.js";
 
 export default {
   name: "my-projects",
