@@ -2,17 +2,23 @@
 import {DueDiligenceProjectsApiService} from "../due-diligence/services/due-diligence-projects-api.service.js";
 import {AgentsApiService} from "../shared/services/agents-api.service.js";
 import {PendingProjectsApiService} from "../pending-projects/services/pending-projects-api.service.js";
+import dashboard from "../dashboard/components/dashboard.vue";
 
 export default {
   name: "workspace",
-  components: {},
+  props: ['id'],
+  components: {dashboard},
   data() {
     return {
+      // Props
+      user_local: null,
+      // Global variables for Components
+      selectedProject: null,
       // Routes
       items: [
-        { label: "Due Diligence", to: "/workspace/due_diligence" },
-        { label: "Q&A", to: "/workspace/due_diligence" },
-        { label: "Settings", to: "/workspace/due_diligence" },
+        { label: "Due Diligence", to: `/${this.$route.params.id}/workspace` },
+        { label: "Q&A", to: `/${this.$route.params.id}/qa` },
+        { label: "Settings", to: `/${this.$route.params.id}/settings` },
       ],
       // Data from Database
       agents: [],
@@ -31,15 +37,26 @@ export default {
     this.getAgents();
     this.getDueDiligenceProjects();
     this.getPendingProjects();
+    this.getUser();
+    console.log(this.$props);
   },
   methods: {
     //// Acquiring data from Database functions (one per data)
+    // Create user from known id
+    getUser() {
+      this.agentsApi.getById(this.$props.id)
+          .then(response => {
+            this.user_local = response.data;
+          })
+          .catch(e => {
+            this.errors.push(e);
+          });
+    },
     // Fetch agents
     getAgents() {
       this.agentsApi.getAll()
           .then(response => {
             this.agents = response.data;
-            console.log(response.data);
           })
           .catch(e => {
             this.errors.push(e);
@@ -50,7 +67,6 @@ export default {
       this.dueDiligenceProjectApi.getAll()
           .then(response => {
             this.dueDiligenceProjects = response.data;
-            console.log(response.data);
           })
           .catch(e => {
             this.errors.push(e);
@@ -61,7 +77,6 @@ export default {
       this.pendingProjectsApi.getAll()
           .then(response => {
             this.pendingProjects = response.data;
-            console.log(response.data);
           })
           .catch(e => {
             this.errors.push(e);
@@ -80,28 +95,17 @@ export default {
         <h3 class="text-white">DiligenceTech</h3>
       </template>
       <template #end>
+        <h3 class="text-white">Welcome: {{this.$props.id}}</h3>
       </template>
     </pv-toolbar>
   </header>
-  <pv-toolbar class="bg-blue-700">
-    <template #start>
-      <div class="flex-column">
-        <router-link
-            v-for="item in items"
-            :to="item.to"
-            custom
-            v-slot="{navigate, href}"
-            :key="item.label"
-        >
-          <pv-button
-              :href="href"
-              @click="navigate"
-          >{{item.label}}</pv-button>
-        </router-link>
-      </div>
-    </template>
-  </pv-toolbar>
-  <RouterView />
+  <div class="flex h-screen">
+    <dashboard></dashboard>
+    <RouterView class="col-10"
+        :user="user_local"
+    />
+  </div>
+
 </template>
 
 <style scoped>

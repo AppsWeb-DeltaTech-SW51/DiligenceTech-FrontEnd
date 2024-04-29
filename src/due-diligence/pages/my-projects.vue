@@ -1,10 +1,14 @@
 <script>
-import {DueDiligenceProjectsApiService} from "../due-diligence/services/due-diligence-projects-api.service.js";
+import {DueDiligenceProjectsApiService} from "../services/due-diligence-projects-api.service.js";
 
 export default {
   name: "my-projects",
+  props: ['id','user'],
   data() {
     return {
+      // Props
+      user_local: this.user,
+      // Else
       projects: [],
       project: {},
       selectedProjects: null,
@@ -16,7 +20,26 @@ export default {
     this.projectsService.getAll()
         .then((response) => {
           this.projects = response.data;
-          console.log(response.data);
+          this.projects.forEach(
+              project => {
+                project.buy_side_agents_id.forEach(
+                  buyAgents => {
+                    if (buyAgents === this.$props.id) {
+                      project.user_type = "Buy Side";
+                    }
+                  }
+                );
+                project.sell_side_agents_id.forEach(
+                    sellAgents => {
+                      if (sellAgents === this.$props.id) {
+                        project.user_type = "Sell Side";
+                      }
+                    }
+                );
+                console.log(project.buy_side_agents_id);
+                console.log(project.sell_side_agents_id);
+              }
+          );
         });
   },
   methods: {
@@ -47,6 +70,8 @@ export default {
         </template>
       </pv-toolbar>
 
+
+
       <pv-data-table
           ref="dt"
           :value="projects"
@@ -60,6 +85,7 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           current-page-report-template="Showing {first} to {last} of
 {totalRecords} projects"
           responsive-layout="scroll"
+          show-gridlines
       >
         <template #header>
           <div class="table-header flex flex-column md:flex-row
@@ -76,33 +102,46 @@ md:justify-content-between">
             field="id"
             header="Id"
             :sortable="true"
-            style="min-width: 12rem"
+            style="min-width: 6rem"
         ></pv-column>
         <pv-column
             field="name"
             header="Name"
             :sortable="true"
-            style="min-width: 16rem"
+            style="min-width: 10rem"
         ></pv-column>
         <pv-column
             field="date_published"
             header="Date Published"
             :sortable="true"
-            style="min-width: 16rem"
+            style="min-width: 14rem"
         ></pv-column>
         <pv-column
             field="date_edited"
             header="Date Edited"
             :sortable="true"
-            style="min-width: 16rem"
+            style="min-width: 14rem"
+        ></pv-column>
+        <pv-column
+            field="user_type"
+            header="Team"
+            :sortable="true"
+            style="min-width: 8rem"
         ></pv-column>
         <pv-column :exportable="false" style="min-width: 8rem">
           <template #body="slotProps">
-            <pv-button
-                icon="pi pi-briefcase"
-                class="p-button-text p-button-rounded"
-                @click=""
-            />
+            <router-link
+                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}`"
+            >
+              <pv-button
+                  icon="pi pi-chevron-right"
+                  class="mr-2"
+                  severity="success"
+                  rounded
+                  @click=""
+              />
+            </router-link>
+
           </template>
         </pv-column>
       </pv-data-table>

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import myProjectsView from "../views/my-projects.vue";
+import myProjectsView from "../due-diligence/pages/my-projects.vue";
 import LogInView from "../iam/pages/log-in.view.vue";
 
 const router = createRouter({
@@ -9,27 +9,34 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: () => import('../iam/pages/log-in.view.vue'),
+            props: true,
         },
         {
-            path: '/workspace',
+            path: '/:id',
             name: 'workspace',
             component: () => import('../views/workspace.view.vue'),
+            props: true,
             children: [
                 {
-                    path: '/workspace/due_diligence',
-                    name: 'workspace/due_diligence',
-                    component: () => import('../views/my-projects.vue'),
+                    path: '/:id/workspace',
+                    name: 'due_diligence',
+                    component: () => import('../due-diligence/pages/my-projects.vue'),
+                    props: true,
                 },
                 {
-                    path: '/workspace/qa',
-                    name: 'workspace/qa',
+                    path: '/:id/workspace/:project_id',
+                    name: 'due_diligence/project',
+                    props: true,
+                },
+                {
+                    path: '/:id/qa',
+                    name: 'qa',
+                },
+                {
+                    path: '/:id/settings',
+                    name: 'settings',
                 },
             ],
-        },
-        {
-            path: '/my-projects',
-            name: 'my-projects',
-            component: () => import('../views/my-projects.vue'),
         },
         {
             path: '/',

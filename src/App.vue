@@ -6,21 +6,17 @@ import {PendingProjectsApiService} from "./pending-projects/services/pending-pro
 
 export default {
   name: "App",
-  components: {},
   data() {
     return {
       // Routes
       items: [
         { label: "My Projects", to: "/my-projects" },
       ],
+      // Global Data
       // Data from Database
       agents: [],
-      dueDiligenceProjects: [],
-      pendingProjects: [],
       // Services to acquire data from Database (one per data)
       agentsApi: new AgentsApiService(),
-      dueDiligenceProjectApi: new DueDiligenceProjectsApiService(),
-      pendingProjectsApi: new PendingProjectsApiService(),
       // Errors
       errors: []
     }
@@ -28,8 +24,6 @@ export default {
   created() {
     // Acquiring data from Database (one per data)
     this.getAgents();
-    this.getDueDiligenceProjects();
-    this.getPendingProjects();
   },
   methods: {
     //// Acquiring data from Database functions (one per data)
@@ -44,35 +38,14 @@ export default {
             this.errors.push(e);
           });
     },
-    // Fetch Due Diligence Projects
-    getDueDiligenceProjects() {
-      this.dueDiligenceProjectApi.getAll()
-          .then(response => {
-            this.dueDiligenceProjects = response.data;
-            console.log(response.data);
-          })
-          .catch(e => {
-            this.errors.push(e);
-          });
-    },
-    // Fetch Pending Projects
-    getPendingProjects() {
-      this.pendingProjectsApi.getAll()
-          .then(response => {
-            this.pendingProjects = response.data;
-            console.log(response.data);
-          })
-          .catch(e => {
-            this.errors.push(e);
-          });
-    },
   }
 }
 </script>
 
 <template>
   <pv-toast /> <!-- Don't know if i can remove it -->
-  <RouterView />
+  <RouterView
+  />
 </template>
 
 <style scoped>

@@ -4,25 +4,13 @@
       "id": "u202111654",
       "email": "u202111654@upc.edu.pe",
       "username" : "Julio Elsner",
-      "password" : "trif123",
-      "pendingProjects_id": [
-        "PJ5757"
-      ],
-      "dueDiligenceProjects_id": [
-        "PJ2122"
-      ]
+      "password" : "trif123"
     },
     {
       "id": "u202218227",
       "email": "u202218227@upc.edu.pe",
       "username" : "Luis Eduardo Herrera",
-      "password" : "la-sexta-es-inevitable123",
-      "pendingProjects_id": [
-        "PJ5757"
-      ],
-      "dueDiligenceProjects_id": [
-        "PJ2122"
-      ]
+      "password" : "la-sexta-es-inevitable123"
     }
   ],
   "agentProjectInvitation": [
@@ -55,25 +43,52 @@
       "name": "Project Gloria",
       "date_published": "10-02-2023",
       "date_edited": "10-03-2023",
-      "informationStorage_id": "IR21832",
-      "QandAStorage_id": "QA18173",
-      "sell_Side_agents_id": [
+      "sell_side_agents_id": [
         "u202111654"
       ],
-      "buy_Side_agents_id": [
+      "buy_side_agents_id": [
         "u202218227"
       ]
     }
   ],
-  "informationStorage": [
+  "informationGroup": [
     {
-      "id": "IR21832",
-      "areas_directory": [
-        "IR21832/Financial",
-        "IR21832/Legal",
-        "IR21832/Tax",
-        "IR21832/Operational"
-      ]
+      "project_id": "PJ2122",
+      "identifier": "Financiero",
+      "name": "Financiero",
+      "parent": null
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "1",
+      "name": "Balance de comprobación (en Excel) abierto al máximo nivel de dígitos (años 2015 al 2017)",
+      "parent": "Financiero"
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "2",
+      "name": "Mayores analíticos de las cuentas contables por los años 2015 al 2017 (en formato Excel).",
+      "parent": "Financiero"
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "2",
+      "name": "Libro de actas de Junta General de Accionistas",
+      "parent": "Financiero"
+    }
+  ],
+  "document": [
+    {
+      "project_id": "PJ21222",
+      "informationGroup_id": 1,
+      "file_name": "comprobantes-2023.xlsx",
+      "file_url": ""
+    },
+    {
+      "project_id": "PJ21222",
+      "informationGroup_id": 1,
+      "file_name": "comprobantes-2022.xlsx",
+      "file_url": ""
     }
   ]
 }
