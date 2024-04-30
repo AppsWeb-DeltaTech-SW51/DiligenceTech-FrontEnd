@@ -15,6 +15,7 @@ export default {
       userTeam_local: null,
       // Props singular ideas
       username: null,
+      image: null,
       // Global variables for Components
       selectedProject: null,
       // Routes
@@ -51,6 +52,7 @@ export default {
           .then(response => {
             this.user_local = response.data;
             this.username = response.data.username;
+            this.image = response.data.image;
           })
           .catch(e => {
             this.errors.push(e);
@@ -100,12 +102,12 @@ export default {
       </template>
       <template #end>
         <h3 class="text-white mr-2">Welcome: {{this.username}}</h3>
-        <pv-avatar :image="this.user_local.image" style="width: 32px; height: 32px" />
+        <pv-avatar :image="this.image" style="width: 32px; height: 32px" />
       </template>
     </pv-toolbar>
   </header>
-  <div class="flex h-screen">
-    <dashboard class=" border-3"></dashboard>
+  <div class="flex">
+    <dashboard class="border-3" style="min-height: 400px;"></dashboard>
     <RouterView
         class="col-10"
         :user="user_local"

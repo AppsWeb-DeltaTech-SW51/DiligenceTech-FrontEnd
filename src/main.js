@@ -29,6 +29,10 @@ import Column from "primevue/column";
 import Tag from "primevue/tag";
 import Divider from "primevue/divider";
 import InputText from "primevue/inputtext";
+import Dialog from "primevue/dialog";
+import Textarea from "primevue/textarea";
+import FileUpload from "primevue/fileupload";
+import Dropdown from "primevue/dropdown";
 
 createApp(App)
     .use(router)
@@ -36,6 +40,10 @@ createApp(App)
     .use(ToastService)
     .component('pv-tag', Tag)
     .component('pv-column', Column)
+    .component('pv-dropdown', Dropdown)
+    .component('pv-file-upload', FileUpload)
+    .component('pv-dialog', Dialog)
+    .component('pv-textarea', Textarea)
     .component('pv-divider', Divider)
     .component('pv-input-text', InputText)
     .component('pv-data-table', DataTable)

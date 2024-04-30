@@ -11,6 +11,7 @@ export default {
       userTeam_local: this.userTeam,
       // Else
       projects: [],
+      myProjects: [],
       project: {},
       selectedProjects: null,
       projectsService: null,
@@ -28,6 +29,7 @@ export default {
                   buyAgents => {
                     if (buyAgents === this.$props.id) {
                       project.user_type = "Buy Side";
+                      this.myProjects.push(project);
                     }
                   }
                 );
@@ -35,6 +37,7 @@ export default {
                     sellAgents => {
                       if (sellAgents === this.$props.id) {
                         project.user_type = "Sell Side";
+                        this.myProjects.push(project);
                       }
                     }
                 );
@@ -84,7 +87,7 @@ export default {
 
       <pv-data-table
           ref="dt"
-          :value="projects"
+          :value="myProjects"
           v-model:selection="selectedProjects"
           dataKey="id"
           :paginator="true"
@@ -124,17 +127,17 @@ md:justify-content-between">
             field="date_published"
             header="Date Published"
             :sortable="true"
-            style="min-width: 14rem"
+            style="min-width: 8rem"
         ></pv-column>
         <pv-column
             field="date_edited"
             header="Date Edited"
             :sortable="true"
-            style="min-width: 14rem"
+            style="min-width: 8rem"
         ></pv-column>
         <pv-column
             field="user_type"
-            header="Team"
+            header="My Team"
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>

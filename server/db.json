@@ -58,44 +58,80 @@
       "buy_side_agents_id": [
         "u202218227"
       ]
+    },
+    {
+      "id": "PJ2121",
+      "name": "Project Messi",
+      "date_published": "10-02-2023",
+      "date_edited": "10-03-2023",
+      "sell_side_agents_id": [
+        "u202218227"
+      ],
+      "buy_side_agents_id": [
+        "u202218226"
+      ]
+    },
+    {
+      "id": "PJ2120",
+      "name": "Project Peru",
+      "date_published": "10-02-2023",
+      "date_edited": "10-03-2023",
+      "sell_side_agents_id": [
+        "u202111654"
+      ],
+      "buy_side_agents_id": [
+        "u202218226"
+      ]
     }
   ],
   "informationGroup": [
     {
+      "id": 1,
       "project_id": "PJ2122",
       "identifier": "Financiero",
       "name": "Financiero",
-      "parent": null
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null
     },
     {
+      "id": 2,
       "project_id": "PJ2122",
       "identifier": "1",
       "name": "Balance de comprobación (en Excel) abierto al máximo nivel de dígitos (años 2015 al 2017)",
-      "parent": "Financiero"
+      "parent": "Financiero",
+      "buy_status": "None",
+      "sell_status": "None"
     },
     {
+      "id": 3,
       "project_id": "PJ2122",
       "identifier": "2",
       "name": "Mayores analíticos de las cuentas contables por los años 2015 al 2017 (en formato Excel).",
-      "parent": "Financiero"
+      "parent": "Financiero",
+      "buy_status": "In Progress",
+      "sell_status": "Done"
     },
     {
+      "id": 4,
       "project_id": "PJ2122",
-      "identifier": "2",
+      "identifier": "3",
       "name": "Libro de actas de Junta General de Accionistas",
-      "parent": "Financiero"
+      "parent": "Financiero",
+      "buy_status": "In Progress",
+      "sell_status": "In Progress"
     }
   ],
   "document": [
     {
-      "project_id": "PJ21222",
-      "informationGroup_id": 1,
+      "project_id": "PJ2122",
+      "informationGroup_id": "1",
       "file_name": "comprobantes-2023.xlsx",
       "file_url": ""
     },
     {
-      "project_id": "PJ21222",
-      "informationGroup_id": 1,
+      "project_id": "PJ2122",
+      "informationGroup_id": "1",
       "file_name": "comprobantes-2022.xlsx",
       "file_url": ""
     }
