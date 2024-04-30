@@ -3,11 +3,12 @@ import {DueDiligenceProjectsApiService} from "../services/due-diligence-projects
 
 export default {
   name: "my-projects",
-  props: ['id','user'],
+  props: ['id','user','userTeam'],
   data() {
     return {
       // Props
       user_local: this.user,
+      userTeam_local: this.userTeam,
       // Else
       projects: [],
       project: {},
@@ -16,6 +17,7 @@ export default {
     };
   },
   created() {
+    this.userTeam_local = null;
     this.projectsService = new DueDiligenceProjectsApiService();
     this.projectsService.getAll()
         .then((response) => {
@@ -43,6 +45,9 @@ export default {
         });
   },
   methods: {
+    goingToProject(team) {
+      this.userTeam_local = team;
+    },
   },
 };
 </script>
@@ -138,7 +143,7 @@ md:justify-content-between">
                   class="mr-2"
                   severity="success"
                   rounded
-                  @click=""
+                  @click="goingToProject(slotProps.data.user_type)"
               />
             </router-link>
 

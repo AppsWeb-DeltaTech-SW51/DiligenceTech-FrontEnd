@@ -12,6 +12,7 @@ export default {
     return {
       // Props
       user_local: null,
+      userTeam_local: null,
       // Global variables for Components
       selectedProject: null,
       // Routes
@@ -101,8 +102,10 @@ export default {
   </header>
   <div class="flex h-screen">
     <dashboard></dashboard>
-    <RouterView class="col-10"
+    <RouterView
+        class="col-10"
         :user="user_local"
+        :userTeam="userTeam"
     />
   </div>
 

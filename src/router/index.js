@@ -26,6 +26,7 @@ const router = createRouter({
                 {
                     path: '/:id/workspace/:project_id',
                     name: 'due_diligence/project',
+                    component: () => import('../due-diligence/pages/project-showcase.vue'),
                     props: true,
                 },
                 {
