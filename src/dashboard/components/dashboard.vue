@@ -4,6 +4,11 @@ export default {
   data() {
     return {
       items: [
+        { label: "My Projects", to: `/${this.$route.params.id}/workspace` },
+        { label: "Project Creation", to: `/${this.$route.params.id}/qa` },
+        { label: "Settings", to: `/${this.$route.params.id}/settings` },
+      ],
+      project_items: [
         { label: "Due Diligence", to: `/${this.$route.params.id}/workspace` },
         { label: "Q&A", to: `/${this.$route.params.id}/qa` },
         { label: "Settings", to: `/${this.$route.params.id}/settings` },
@@ -14,7 +19,7 @@ export default {
 </script>
 
 <template>
-  <div class="col-2 w-48 bg-blue-800 text-white pt-4">
+  <div class="col-2 w-48 bg-gray-900 text-white pt-4">
     <router-link v-for="item in items" :key="item.label" :to="item.to"
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
       <span class="text-white text">{{ item.label }}</span>

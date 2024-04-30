@@ -13,6 +13,8 @@ export default {
       // Props
       user_local: null,
       userTeam_local: null,
+      // Props singular ideas
+      username: null,
       // Global variables for Components
       selectedProject: null,
       // Routes
@@ -48,6 +50,7 @@ export default {
       this.agentsApi.getById(this.$props.id)
           .then(response => {
             this.user_local = response.data;
+            this.username = response.data.username;
           })
           .catch(e => {
             this.errors.push(e);
@@ -96,12 +99,13 @@ export default {
         <h3 class="text-white">DiligenceTech</h3>
       </template>
       <template #end>
-        <h3 class="text-white">Welcome: {{this.$props.id}}</h3>
+        <h3 class="text-white mr-2">Welcome: {{this.username}}</h3>
+        <pv-avatar :image="this.user_local.image" style="width: 32px; height: 32px" />
       </template>
     </pv-toolbar>
   </header>
   <div class="flex h-screen">
-    <dashboard></dashboard>
+    <dashboard class=" border-3"></dashboard>
     <RouterView
         class="col-10"
         :user="user_local"

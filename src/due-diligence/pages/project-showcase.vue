@@ -15,6 +15,7 @@ export default {
       informationGroups_grandparents: [],
       informationGroups_focused: [],
       selectedProjects: null,
+      expandedRows: null,
       informationGroupsService: null,
     };
   },
@@ -31,7 +32,12 @@ export default {
                   // see if it has children
                   this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
                       .then((response) => {
-                        informationGroup.hasChildren = response.data;
+                        if(response.data.length === 0) {
+                          informationGroup.has_children = false;
+                        }
+                        else {
+                          informationGroup.has_children = true;
+                        }
                       });
                 }
               }
@@ -58,7 +64,12 @@ export default {
                     // see if it has children
                     this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
                         .then((response) => {
-                          informationGroup.hasChildren = response.data;
+                          if(response.data.length === 0) {
+                            informationGroup.has_children = false;
+                          }
+                          else {
+                            informationGroup.has_children = true;
+                          }
                         });
                   }
                 }
@@ -89,7 +100,12 @@ export default {
                     // see if it has children
                     this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
                         .then((response) => {
-                          informationGroup.hasChildren = response.data;
+                          if(response.data.length === 0) {
+                            informationGroup.has_children = false;
+                          }
+                          else {
+                            informationGroup.has_children = true;
+                          }
                         });
                   }
                 }
@@ -109,7 +125,15 @@ export default {
 <template>
   <div>
     <div class="card">
-      <pv-toolbar class="mb-4">
+      <pv-toolbar class="mb-4 border-2">
+        <template #start>
+          <h3>Project</h3>
+        </template>
+        <template #end>
+          <h3>{{htmlUserType(this.$props.user_type)}}</h3>
+        </template>
+      </pv-toolbar>
+      <pv-toolbar class="mb-4 bg-gray-900">
         <template #start>
           <pv-button
               label="New"
@@ -135,6 +159,7 @@ export default {
           ref="dt"
           :value="informationGroups_focused"
           v-model:selection="selectedProjects"
+          v-model:expandedRows="expandedRows"
           dataKey="identifier"
           :paginator="true"
           :rows="10"
@@ -150,7 +175,6 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           <div class="table-header flex flex-column md:flex-row
 md:justify-content-between">
             <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{this.$props.project_id}}</h5>
-            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{ htmlUserType(this.$props.user_type) }}</h5>
             <pv-button
                 icon="pi pi-chevron-left"
                 class="mr-2"
@@ -161,9 +185,8 @@ md:justify-content-between">
           </div>
         </template>
         <pv-column
-            selectionMode="multiple"
+            :expander="true"
             style="width: 3rem"
-            :exportable="false"
         ></pv-column>
         <pv-column
             field="id"
@@ -195,23 +218,23 @@ md:justify-content-between">
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
-        <pv-column :exportable="false" style="min-width: 8rem">
+        <pv-column :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <pv-button
                 icon="pi pi-chevron-right"
+                v-if="slotProps.data.has_children"
                 class="mr-2"
-
                 severity="success"
                 rounded
                 @click="changeInformationGroup(slotProps.data.identifier)"
             />
             <pv-button
                 icon="pi pi-chevron-down"
+                v-else
                 class="mr-2"
-
                 severity="info"
                 rounded
-                @click="changeInformationGroup(slotProps.data.identifier)"
+                @click=""
             />
           </template>
         </pv-column>

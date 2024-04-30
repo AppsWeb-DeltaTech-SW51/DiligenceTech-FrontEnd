@@ -61,20 +61,19 @@ export default {
 <template>
   <div>
     <div class="card">
-      <pv-toolbar class="mb-4">
+      <pv-toolbar class="mb-4 border-2">
+        <template #start>
+          <h3>My Projects</h3>
+        </template>
+        <template #end>
+        </template>
+      </pv-toolbar>
+      <pv-toolbar class="mb-4 bg-gray-900">
         <template #start>
           <pv-button
-              label="New"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
+              label="Nothing Yet"
+              class="p-button-warning mr-2"
               @click=""
-          />
-          <pv-button
-              label="Delete"
-              icon="pi pi-trash"
-              class="p-button-danger"
-              @click=""
-              :disabled="true"
           />
         </template>
         <template #end>
@@ -139,7 +138,7 @@ md:justify-content-between">
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
-        <pv-column :exportable="false" style="min-width: 8rem">
+        <pv-column :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <router-link
                 :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"

@@ -3,14 +3,23 @@
     {
       "id": "u202111654",
       "email": "u202111654@upc.edu.pe",
-      "username" : "Julio Elsner",
-      "password" : "trif123"
+      "username": "Julio Elsner",
+      "password": "trif123",
+      "image": "https://cdn-icons-png.flaticon.com/256/622/622851.png"
     },
     {
       "id": "u202218227",
       "email": "u202218227@upc.edu.pe",
-      "username" : "Luis Eduardo Herrera",
-      "password" : "la-sexta-es-inevitable123"
+      "username": "Luis Eduardo Herrera",
+      "password": "la-sexta-es-inevitable123",
+      "image": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+    },
+    {
+      "id": "u202218226",
+      "email": "u202218226@upc.edu.pe",
+      "username": "Javier Prado",
+      "password": "kendricklamar",
+      "image": "https://cdn-icons-png.flaticon.com/512/8662/8662289.png"
     }
   ],
   "agentProjectInvitation": [
