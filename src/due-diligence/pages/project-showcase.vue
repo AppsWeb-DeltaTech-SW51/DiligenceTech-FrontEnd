@@ -312,7 +312,7 @@ export default {
               <pv-dropdown id="owner" v-model="newDocuments.informationGroup_id" :options="informationGroups_id"></pv-dropdown>
             </div>
             <div class="field">
-              <pv-file-upload accept=".csv,.xls,.xlsx,.pdf" :max-file-size="1000000"></pv-file-upload>
+              <pv-file-upload accept=".csv,.xls,.xlsx,.pdf"></pv-file-upload>
             </div>
             <template #footer>
               <pv-button label="Login" @click="" icon="pi pi-check" class="p-button-outlined"></pv-button>
@@ -387,26 +387,21 @@ md:justify-content-between">
           </template>
         </pv-column>
         <pv-column
+            v-if="informationGroups_grandparents.length === 1"
             :expander="true"
+
             style="width: 3rem"
         ></pv-column>
-        <pv-column :exportable="false" style="min-width: 3rem">
+        <pv-column v-else :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <pv-button
                 icon="pi pi-chevron-right"
+                label="Go"
                 v-if="slotProps.data.has_children"
                 class="mr-2"
                 severity="success"
                 rounded
                 @click="changeInformationGroup(slotProps.data.identifier)"
-            />
-            <pv-button
-                icon="pi pi-chevron-down"
-                v-else
-                class="mr-2"
-                severity="info"
-                rounded
-                @click="expandedDesired(slotProps.data)"
             />
           </template>
         </pv-column>
