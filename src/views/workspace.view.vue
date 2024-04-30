@@ -105,7 +105,7 @@ export default {
     <RouterView
         class="col-10"
         :user="user_local"
-        :userTeam="userTeam"
+        :userTeam="userTeam_local"
     />
   </div>
 

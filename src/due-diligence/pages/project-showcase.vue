@@ -3,7 +3,7 @@ import {InformationGroupApiService} from "../services/informationGroup-api.servi
 
 export default {
   name: "project-showcase",
-  props: ['id','user', 'project_id','userTeam'],
+  props: ['id','user', 'project_id','userTeam','user_type'],
   data() {
     return {
       // Props
@@ -26,7 +26,13 @@ export default {
           this.informationGroups.forEach(
               informationGroup => {
                 if (informationGroup.parent === this.informationGroups_parent) {
+                  // include in showcase
                   this.informationGroups_focused.push(informationGroup);
+                  // see if it has children
+                  this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
+                      .then((response) => {
+                        informationGroup.hasChildren = response.data;
+                      });
                 }
               }
           );
@@ -47,7 +53,13 @@ export default {
             this.informationGroups.forEach(
                 informationGroup => {
                   if (informationGroup.parent === this.informationGroups_parent) {
+                    // include in showcase
                     this.informationGroups_focused.push(informationGroup);
+                    // see if it has children
+                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
+                        .then((response) => {
+                          informationGroup.hasChildren = response.data;
+                        });
                   }
                 }
             );
@@ -72,12 +84,24 @@ export default {
             this.informationGroups.forEach(
                 informationGroup => {
                   if (informationGroup.parent === this.informationGroups_parent) {
+                    // include in showcase
                     this.informationGroups_focused.push(informationGroup);
+                    // see if it has children
+                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
+                        .then((response) => {
+                          informationGroup.hasChildren = response.data;
+                        });
                   }
                 }
             );
           });
-    }
+    },
+    htmlUserType(team) {
+      if (team === "buy_side")
+        return "Buy Side";
+      else
+        return "Sell Side";
+    },
   },
 };
 </script>
@@ -126,7 +150,7 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           <div class="table-header flex flex-column md:flex-row
 md:justify-content-between">
             <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{this.$props.project_id}}</h5>
-            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{ this.userTeam_local }}</h5>
+            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{ htmlUserType(this.$props.user_type) }}</h5>
             <pv-button
                 icon="pi pi-chevron-left"
                 class="mr-2"
@@ -176,11 +200,19 @@ md:justify-content-between">
             <pv-button
                 icon="pi pi-chevron-right"
                 class="mr-2"
+
                 severity="success"
                 rounded
                 @click="changeInformationGroup(slotProps.data.identifier)"
             />
+            <pv-button
+                icon="pi pi-chevron-down"
+                class="mr-2"
 
+                severity="info"
+                rounded
+                @click="changeInformationGroup(slotProps.data.identifier)"
+            />
           </template>
         </pv-column>
       </pv-data-table>

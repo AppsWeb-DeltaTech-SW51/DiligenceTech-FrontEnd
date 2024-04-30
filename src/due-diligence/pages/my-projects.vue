@@ -48,6 +48,12 @@ export default {
     goingToProject(team) {
       this.userTeam_local = team;
     },
+    viewUserType(team) {
+      if (team === "Buy Side")
+        return "buy_side";
+      else
+        return "sell_side";
+    },
   },
 };
 </script>
@@ -136,7 +142,7 @@ md:justify-content-between">
         <pv-column :exportable="false" style="min-width: 8rem">
           <template #body="slotProps">
             <router-link
-                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}`"
+                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
             >
               <pv-button
                   icon="pi pi-chevron-right"
