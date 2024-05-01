@@ -107,11 +107,6 @@ md:justify-content-between">
           </div>
         </template>
         <pv-column
-            selectionMode="multiple"
-            style="width: 3rem"
-            :exportable="false"
-        ></pv-column>
-        <pv-column
             field="id"
             header="Id"
             :sortable="true"

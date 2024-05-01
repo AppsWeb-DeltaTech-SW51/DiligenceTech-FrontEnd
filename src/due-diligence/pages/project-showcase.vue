@@ -117,6 +117,7 @@ export default {
       // delete focus' informationGroups
       while (this.informationGroups_focused.length != 0) {
         this.informationGroups_focused.pop();
+        this.informationGroups_id.pop();
       }
       // change value of father
       if (this.informationGroups_grandparents.length != 0) {
@@ -195,8 +196,21 @@ export default {
     createInformationItem() {
       // transform into possible information group
       //// identifier = parent.id (except if area) + next_not_taken_number (done before)
+      ////// next_number
+      let next_number = 1;
+      let canLeave = false;
+      while (!canLeave) {
+        canLeave = true;
+        this.informationGroups_focused.forEach(
+            (informationGroup) => {
+              if (parseInt(informationGroup.identifier) == next_number) {
+                next_number += 1;
+                canLeave = false;
+              }
+            });
+      }
       ////// now with parent.id
-      this.informationItem.identifier = (this.informationGroups_grandparents.length <= 1 ? '' : this.informationGroups_parent + '.') + this.next_number.toString();
+      this.informationItem.identifier = (this.informationGroups_grandparents.length <= 1 ? '' : this.informationGroups_parent + '.') + next_number.toString();
       //// get parent
       this.informationItem.parent = this.informationGroups_parent;
       // POST in db
@@ -209,6 +223,8 @@ export default {
       this.informationItem.name = '';
       // Get out of Dialog
       this.newInformationItemDialog = false;
+      // Refresh (for now)
+      this.$router;
     },
     htmlUserType(team) {
       if (team === "buy_side")
@@ -357,6 +373,7 @@ md:justify-content-between">
         <pv-column
             field="identifier"
             header="Id"
+            v-if="this.informationGroups_grandparents.length === 1"
             :sortable="true"
             style="min-width: 4rem"
         ></pv-column>
