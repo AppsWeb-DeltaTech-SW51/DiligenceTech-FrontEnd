@@ -240,7 +240,7 @@ md:justify-content-between">
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
-        <pv-column header="Confirm" :exportable="false" style="min-width: 3rem">
+        <pv-column header="Confirm" :exportable="false" style="min-width: 12rem">
           <template #body="slotProps">
             <pv-button
                 icon="pi pi-chevron-right"
@@ -253,17 +253,21 @@ md:justify-content-between">
           </template>
         </pv-column>
         <pv-column
-            field="sell_confirms"
             header="Sell-Side Confirms"
-            :sortable="true"
-            style="min-width: 8rem"
-        ></pv-column>
+            style="min-width: 4rem"
+        >
+          <template #body="slotProps">
+            <pv-button :label="`${slotProps.data.sell_confirms.filter(Boolean).length}/${slotProps.data.sell_confirms.length}`"></pv-button>
+          </template>
+        </pv-column>
         <pv-column
-            field="buy_confirms"
             header="Buy-Side Confirms"
-            :sortable="true"
-            style="min-width: 8rem"
-        ></pv-column>
+            style="min-width: 4rem"
+        >
+          <template #body="slotProps">
+            <pv-button :label="`${slotProps.data.buy_confirms.filter(Boolean).length}/${slotProps.data.buy_confirms.length}`"></pv-button>
+          </template>
+        </pv-column>
       </pv-data-table>
     </div>
   </div>

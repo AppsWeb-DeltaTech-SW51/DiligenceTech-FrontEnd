@@ -46,7 +46,7 @@ export default {
   </div>
   <div
       v-else
-      class="col-2 w-48 bg-gray-900 text-white pt-4"
+      class="col-2 border-3 w-48 bg-gray-900 text-white pt-4"
   >
     <router-link v-for="item in project_items" :key="item.label" :to="item.to"
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">

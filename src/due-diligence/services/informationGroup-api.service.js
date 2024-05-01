@@ -8,6 +8,10 @@ export class InformationGroupApiService extends BaseService {
         return http.get(`${this.complementUrl}?project_id=${project_id}`);
     }
 
+    getOneItem(project_id, identifier) {
+        return http.get(`${this.complementUrl}?project_id=${project_id}&identifier=${identifier}`);
+    }
+
     getChildren(project_id, identifier) {
         return http.get(`${this.complementUrl}?project_id=${project_id}&parent=${identifier}`);
     }

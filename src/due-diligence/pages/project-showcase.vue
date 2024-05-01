@@ -22,6 +22,8 @@ export default {
       changeBuyStatusDialog: false,
       changeSellStatusDialog: false,
       // Else
+      statusDependency: null,
+      statusSwitcher: '',
       informationGroups: [],
       informationGroups_parent: null,
       informationGroups_grandparents: [],
@@ -90,42 +92,46 @@ export default {
       uploadBytes(storageRef, this.$refs.myFile.files[0])
           .then((snapshot) => {
             console.log('uploaded');
+            getDownloadURL(ref(storageRef))
+                .then((url) => {
+                  // Create
+                  this.documentsService.create({
+                    project_id: this.$props.project_id,
+                    informationGroup_id: this.newDocuments.informationGroup_id,
+                    file_name: this.$refs.myFile.files[0].name,
+                    file_url: url,
+                  });
+                  // Update on InformationGroups in here
+                  this.informationGroups.forEach((informationGroup) => {
+                    if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+                      informationGroup.children.push({
+                        project_id: this.$props.project_id,
+                        informationGroup_id: this.newDocuments.informationGroup_id,
+                        file_name: this.$refs.myFile.files[0].name,
+                        file_url: url,
+                      });
+                    }
+                  });
+                  /*
+                  // Update on the focused informationGroups
+                  this.informationGroups_focused.forEach((informationGroup) => {
+                    if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+                      informationGroup.children.push({
+                        project_id: this.$props.project_id,
+                        informationGroup_id: this.newDocuments.informationGroup_id,
+                        file_name: this.$refs.myFile.files[0].name,
+                        file_url: url,
+                      });
+                    }
+                  });
+                  */
           });
-      // Include Reference in Database through POST
-      getDownloadURL(ref(storageRef))
-          .then((url) => {
-            // Create
-            this.documentsService.create({
-              project_id: 'xd',
-              informationGroup_id: 'xd',
-              file_name: 'xd',
-              file_url: 'xd',
-            });
-            /*
-            // Update on InformationGroups in here
-            this.informationGroups.forEach((informationGroup) => {
-              if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
-                informationGroup.children.push({
-                  project_id: this.$props.project_id,
-                  informationGroup_id: this.newDocuments.informationGroup_id,
-                  file_name: this.$refs.myFile.files[0].name,
-                  file_url: url,
-                });
-              }
-            });
-            this.informationGroups_focused.forEach((informationGroup) => {
-              if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
-                informationGroup.children.push({
-                  project_id: this.$props.project_id,
-                  informationGroup_id: this.newDocuments.informationGroup_id,
-                  file_name: this.$refs.myFile.files[0].name,
-                  file_url: url,
-                });
-              }
-            });
-            */
+          })
+          .catch((error) => {
+            console.log('firebase not working');
           });
       // Close Dialog
+      this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
     },
     // Firebase Basic
     uploadBasic: function() {
@@ -227,11 +233,15 @@ export default {
           });
     },
     // Change Status Dialog
-    openBuyStatusDialog() {
+    openBuyStatusDialog(data) {
+      this.statusDependency = data;
       this.changeBuyStatusDialog = true;
+      this.statusSwitcher = this.statusDependency.buy_status;
     },
-    openSellStatusDialog() {
+    openSellStatusDialog(data) {
+      this.statusDependency = data;
       this.changeSellStatusDialog = true;
+      this.statusSwitcher = this.statusDependency.sell_status;
     },
     // Documents Dialog
     openNewDocumentsDialog() {
@@ -355,6 +365,16 @@ export default {
         return "Buy Side";
       else
         return "Sell Side";
+    },
+    updateStatus(buy_side) {
+      if (buy_side) {
+        this.statusDependency.buy_status = this.statusSwitcher;
+        this.informationGroupsService.update(this.statusDependency.id, this.statusDependency);
+      }
+      else {
+        this.statusDependency.sell_status = this.statusSwitcher;
+        this.informationGroupsService.update(this.statusDependency.id, this.statusDependency);
+      }
     },
     getStatusSeverity(status) {
       switch (status) {
@@ -521,7 +541,10 @@ md:justify-content-between">
                 :style="{ width: '30vw' }"
                 :modal="true"
             >
-              <pv-dropdown id="status" v-model="slotProps.data.buy_status" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+              <pv-dropdown id="status" v-model="this.statusSwitcher" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+              <template #footer>
+                <pv-button label="Confirm" class="p-button-outlined" @click="updateStatus(true)"></pv-button>
+              </template>
             </pv-dialog>
             <pv-dialog
                 header="Change Sell-Side Status"
@@ -530,7 +553,10 @@ md:justify-content-between">
                 :style="{ width: '30vw' }"
                 :modal="true"
             >
-              <pv-dropdown id="status" v-model="slotProps.data.sell_status" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+              <pv-dropdown id="status" v-model="this.statusSwitcher" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+              <template #footer>
+                <pv-button label="Confirm" class="p-button-outlined" @click="updateStatus(false)"></pv-button>
+              </template>
             </pv-dialog>
             <pv-button
                 label="Change Status"
@@ -538,7 +564,7 @@ md:justify-content-between">
                 class="mr-2 p-button-outlined"
                 severity="info"
                 rounded
-                @click="openSellStatusDialog"
+                @click="openSellStatusDialog(slotProps.data)"
             />
             <pv-button
                 icon="pi pi-chevron-right"
@@ -547,7 +573,7 @@ md:justify-content-between">
                 class="mr-2 p-button-outlined"
                 severity="info"
                 rounded
-                @click="openBuyStatusDialog"
+                @click="openBuyStatusDialog(slotProps.data)"
             />
           </template>
         </pv-column>
