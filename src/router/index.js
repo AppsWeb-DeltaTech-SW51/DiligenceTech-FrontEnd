@@ -30,12 +30,23 @@ const router = createRouter({
                     props: true,
                 },
                 {
-                    path: '/:id/qa',
+                    path: '/:id/qa/:project_id/:user_type',
                     name: 'qa',
+                    component: () => import('../qa/pages/qa-showcase.vue'),
+                    props: true,
+                },
+                {
+                    path: '/:id/project_creation',
+                    name: 'project_creation',
+                    props: true,
                 },
                 {
                     path: '/:id/settings',
                     name: 'settings',
+                },
+                {
+                    path: '/:id/settings/:project_id/:user_type',
+                    name: 'settings_project',
                 },
             ],
         },

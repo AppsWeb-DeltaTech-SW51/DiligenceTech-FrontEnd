@@ -18,6 +18,7 @@ export default {
     };
   },
   created() {
+    this.$emit('openGeneralDashboard');
     this.userTeam_local = null;
     this.projectsService = new DueDiligenceProjectsApiService();
     this.projectsService.getAll()
@@ -50,6 +51,7 @@ export default {
   methods: {
     goingToProject(team) {
       this.userTeam_local = team;
+      this.$emit('openProjectDashboard');
     },
     viewUserType(team) {
       if (team === "Buy Side")

@@ -13,11 +13,13 @@ export default {
       // Props
       user_local: null,
       userTeam_local: null,
+      projectId: null,
       // Props singular ideas
       username: null,
       image: null,
       // Global variables for Components
       selectedProject: null,
+      insideProject: false,
       // Routes
       items: [
         { label: "Due Diligence", to: `/${this.$route.params.id}/workspace` },
@@ -45,6 +47,13 @@ export default {
     console.log(this.$props);
   },
   methods: {
+    // For changing dashboard
+    openProjectDashboard() {
+      this.insideProject = true;
+    },
+    openGeneralDashboard() {
+      this.insideProject = false;
+    },
     //// Acquiring data from Database functions (one per data)
     // Create user from known id
     getUser() {
@@ -107,11 +116,20 @@ export default {
     </pv-toolbar>
   </header>
   <div class="flex">
-    <dashboard class="border-3" style="min-height: 400px;"></dashboard>
+    <dashboard
+        class="border-3"
+        style="min-height: 400px;"
+        :insideProject2="this.insideProject"
+        :project_id="projectId"
+        :user_team="userTeam_local"
+    ></dashboard>
     <RouterView
         class="col-10"
         :user="user_local"
         :userTeam="userTeam_local"
+        :insideProject="projectId"
+        @openProjectDashboard="openProjectDashboard"
+        @openGeneralDashboard="openGeneralDashboard"
     />
   </div>
 

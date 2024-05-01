@@ -1,10 +1,10 @@
 <script>
-import {InformationGroupApiService} from "../services/informationGroup-api.service.js";
-import {DocumentsApiService} from "../services/documents-api.service.js";
+import {InformationGroupApiService} from "../../due-diligence/services/informationGroup-api.service.js";
+import {DocumentsApiService} from "../../due-diligence/services/documents-api.service.js";
 import { storage } from "../../firebase.js";
 
 export default {
-  name: "project-showcase",
+  name: "qa-showcase",
   props: ['id','user', 'project_id','userTeam','user_type','insideProject'],
   data() {
     return {
@@ -279,12 +279,13 @@ export default {
     <div class="card">
       <pv-toolbar class="mb-4 border-2">
         <template #start>
-          <h3>Project</h3>
+          <h3>Project Q&A</h3>
         </template>
         <template #end>
           <h3>{{htmlUserType(this.$props.user_type)}}</h3>
         </template>
       </pv-toolbar>
+
       <pv-toolbar class="mb-4 bg-gray-900">
         <template #start>
           <pv-dialog
@@ -308,36 +309,11 @@ export default {
           </pv-dialog>
           <pv-button
               v-if="this.$props.user_type === 'buy_side'"
-              label="New Information Item"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openNewInformationItemDialog"
-          />
-          <pv-button
-              v-else
-              label="Add Document"
+              label="New Question"
               icon="pi pi-plus"
               class="p-button-info mr-2"
-              @click="openNewDocumentsDialog"
+              @click="openNewInformationItemDialog"
           />
-          <pv-dialog
-              header="Add Documents"
-              v-model:visible="newDocumentsDialog"
-              :breakpoints="{ '960px': '75vw' }"
-              :style="{ width: '60vw' }"
-              :modal="true"
-          >
-            <div class="field">
-              <label for="owner" class="block">Inside:</label>
-              <pv-dropdown id="owner" v-model="newDocuments.informationGroup_id" :options="informationGroups_id"></pv-dropdown>
-            </div>
-            <div class="field">
-              <pv-file-upload accept=".csv,.xls,.xlsx,.pdf"></pv-file-upload>
-            </div>
-            <template #footer>
-              <pv-button label="Login" @click="" icon="pi pi-check" class="p-button-outlined"></pv-button>
-            </template>
-          </pv-dialog>
         </template>
         <template #end>
         </template>
@@ -433,12 +409,12 @@ md:justify-content-between">
           >
             <h5>Documents:</h5>
             <pv-data-table
-              :value="slotProps.data.children"
+                :value="slotProps.data.children"
             >
               <pv-column
-                field="file_name"
-                header="Filename"
-                :sortable="true"
+                  field="file_name"
+                  header="Filename"
+                  :sortable="true"
               ></pv-column>
               <pv-column
                   field="file_name"
