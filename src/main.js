@@ -36,6 +36,7 @@ import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
 import Dropdown from "primevue/dropdown";
 import InputSwitch from "primevue/inputswitch";
+import Panel from "primevue/panel";
 
 createApp(App)
     .use(router)
@@ -44,6 +45,7 @@ createApp(App)
     .component('pv-tag', Tag)
     .component('pv-column', Column)
     .component('pv-input-switch', InputSwitch)
+    .component('pv-panel', Panel)
     .component('pv-dropdown', Dropdown)
     .component('pv-file-upload', FileUpload)
     .component('pv-dialog', Dialog)

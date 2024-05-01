@@ -2,6 +2,8 @@
 import {InformationGroupApiService} from "../../due-diligence/services/informationGroup-api.service.js";
 import {DocumentsApiService} from "../../due-diligence/services/documents-api.service.js";
 import { storage } from "../../firebase.js";
+import {QuestionsApiService} from "../services/questions-api.service.js";
+import {AnswersApiService} from "../services/answers-api.service.js";
 
 export default {
   name: "qa-showcase",
@@ -13,9 +15,16 @@ export default {
       userTeam_local: this.userTeam,
       insideProject_local: this.insideProject,
       // Dialogs
-      newInformationItemDialog: false,
+      newQuestionDialog: false,
       newDocumentsDialog: false,
+      questionDialog: false,
+      // Question Showcase
+      question: {
+        user: null,
+        content: '',
+      },
       // Else
+      questions: [],
       informationGroups: [],
       informationGroups_parent: null,
       informationGroups_grandparents: [],
@@ -26,6 +35,8 @@ export default {
       // Services
       informationGroupsService: null,
       documentsService: null,
+      questionsService: null,
+      answersService: null,
       // Posts
       newDocuments: {
         project_id: this.$props.project_id,
@@ -46,116 +57,35 @@ export default {
     this.$emit('openProjectDashboard');
     this.informationGroupsService = new InformationGroupApiService();
     this.documentsService = new DocumentsApiService();
+    this.questionsService = new QuestionsApiService();
+    this.answersService = new AnswersApiService();
+    this.questionsService.getByProject(this.$props.project_id)
+        .then((response) => {
+          this.questions = response.data;
+          this.questions.forEach((questionPossible) => {
+            questionPossible.answer = [];
+            this.answersService.getByQuestionItem(this.$props.project_id, questionPossible.informationGroup_id)
+                .then((response2) => {
+                  console.log(response2.data);
+                  questionPossible.answer = response2.data;
+                });
+          });
+          console.log(this.questions);
+        });
     this.informationGroupsService.getByProject(this.$props.project_id)
         .then((response) => {
           this.informationGroups = response.data;
-          this.informationGroups.forEach(
-              informationGroup => {
-                if (informationGroup.parent === this.informationGroups_parent) {
-                  // include in showcase
-                  this.informationGroups_focused.push(informationGroup);
-                  this.informationGroups_id.push(informationGroup.identifier);
-                  // include its documents
-                  this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                      .then((response) => {
-                        informationGroup.children = response.data;
-                      });
-                  // see if it has children
-                  this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                      .then((response) => {
-                        if(response.data.length === 0) {
-                          informationGroup.has_children = false;
-                        }
-                        else {
-                          informationGroup.has_children = true;
-                        }
-                      });
-                }
-              }
-          );
         });
-    this.next_number = this.getNextNumber(1);
   },
   methods: {
-    changeInformationGroup(group_id) {
-      // delete focus' informationGroups
-      while (this.informationGroups_focused.length != 0) {
-        this.informationGroups_focused.pop();
-        this.informationGroups_id.pop();
-      }
-      // change value of father
-      this.informationGroups_grandparents.push(this.informationGroups_parent);
-      this.informationGroups_parent = group_id;
-      // add new focus' informationGroups
-      this.informationGroupsService.getByProject(this.$props.project_id)
-          .then((response) => {
-            this.informationGroups.forEach(
-                informationGroup => {
-                  if (informationGroup.parent === this.informationGroups_parent) {
-                    // include in showcase
-                    this.informationGroups_focused.push(informationGroup);
-                    this.informationGroups_id.push(informationGroup.identifier);
-                    // include documents
-                    this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          informationGroup.children = response.data;
-                        });
-                    // see if it has children
-                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          if(response.data.length === 0) {
-                            informationGroup.has_children = false;
-                          }
-                          else {
-                            informationGroup.has_children = true;
-                          }
-                        });
-                  }
-                }
-            );
-          });
-      this.next_number = this.getNextNumber(1);
-    },
     returnToMyProjects() {
       this.$router.push(`/${this.user_local.id}/workspace`);
     },
-    // Documents Dialog
-    openNewDocumentsDialog() {
-      this.newDocumentsDialog = true;
-    },
-    addDocuments() {
-      // (1) Add to Firebase
-
-      // (2) Add reference to JSON
-
-      // (3) Close Dialog
-
-    },
     // Information Item Dialog
     openNewInformationItemDialog() {
-      this.newInformationItemDialog = true;
+      this.newQuestionDialog = true;
     },
-    getNextNumber(number) {
-      this.informationGroupsService.getByProject(this.$props.project_id)
-          .then((response) => {
-            let canLeave = false;
-            while (!canLeave) {
-              canLeave = true;
-              response.data.forEach(
-                  informationGroup => {
-                    // currently only works if there's only one parent (for now, always works)
-                    if (informationGroup.parent === this.informationGroups_parent && informationGroup.identifier === number.toString()) {
-                      number += 1;
-                      canLeave = false;
-                    }
-                  }
-              );
-            }
-            return number;
-          });
-      return number;
-    },
-    createInformationItem() {
+    createQuestion() {
       // transform into possible information group
       //// identifier = parent.id (except if area) + next_not_taken_number (done before)
       ////// next_number
@@ -177,14 +107,12 @@ export default {
       this.informationItem.parent = this.informationGroups_parent;
       // POST in db
       this.informationGroupsService.create(this.informationItem);
-      // Change visualization again
-      this.changeInformationGroup(this.informationGroups_parent);
       // Delete content used for next creation
       this.informationItem.identifier = null;
       this.informationItem.parent = null;
       this.informationItem.name = '';
       // Get out of Dialog
-      this.newInformationItemDialog = false;
+      this.newQuestionDialog = false;
       // Refresh (for now)
       this.$router;
     },
@@ -209,25 +137,10 @@ export default {
       }
       return false;
     },
-    expandedDesired(desiredRow) {
-      this.expandedRows.push(desiredRow);
-      this.state.expandedRows
-    },
-    getStatusSeverity(status) {
-      switch (status) {
-        case 'Done':
-          return 'success';
-
-        case 'In Progress':
-          return 'warning';
-
-        case 'None':
-          return 'danger';
-
-        default:
-          return null;
-      }
-    },
+    openQuestion(data) {
+      this.questionDialog = true;
+      this.question = data;
+    }
   },
 };
 </script>
@@ -248,7 +161,7 @@ export default {
         <template #start>
           <pv-dialog
               header="New Information Item"
-              v-model:visible="newInformationItemDialog"
+              v-model:visible="newQuestionDialog"
               :breakpoints="{ '960px': '75vw' }"
               :style="{ width: '30vw' }"
               :modal="true"
@@ -262,7 +175,7 @@ export default {
               <pv-textarea id="item_desc" v-model="this.informationItem.name" placeholder="Escribir documentos deseados" :autoResize="true" rows="5" cols="36" />
             </div>
             <template #footer>
-              <pv-button label="Login" @click="createInformationItem" icon="pi pi-check" class="p-button-outlined"></pv-button>
+              <pv-button label="Login" @click="createQuestion" icon="pi pi-check" class="p-button-outlined"></pv-button>
             </template>
           </pv-dialog>
           <pv-button
@@ -282,7 +195,7 @@ export default {
 
       <pv-data-table
           ref="dt"
-          :value="informationGroups_focused"
+          :value="questions"
           v-model:selection="selectedProjects"
           v-model:expandedRows="expandedRows"
           dataKey="identifier"
@@ -310,89 +223,58 @@ md:justify-content-between">
           </div>
         </template>
         <pv-column
-            field="identifier"
+            field="question_id"
             header="Id"
-            v-if="this.informationGroups_grandparents.length === 1"
             :sortable="true"
             style="min-width: 4rem"
         ></pv-column>
         <pv-column
-            field="name"
-            header="Name"
+            field="user_id"
+            header="User"
+            :sortable="true"
+            style="min-width: 4rem"
+        ></pv-column>
+        <pv-column
+            field="content"
+            header="Content"
             :sortable="true"
             style="min-width: 10rem"
         ></pv-column>
-        <pv-column
-            field="sell_status"
-            header="Sell-Side Status"
-            :sortable="true"
-            style="min-width: 12rem"
-        >
-          <template #body="{data}">
-            <pv-tag :severity="getStatusSeverity(data.sell_status)">{{data.sell_status != null ? data.sell_status : 'AREA'}}</pv-tag>
-          </template>
-        </pv-column>
-        <pv-column
-            field="buy_status"
-            header="Buy-Side Status"
-            :sortable="true"
-            style="min-width: 12rem"
-        >
-          <template #body="{data}">
-            <pv-tag :severity="getStatusSeverity(data.buy_status)">{{data.buy_status != null ? data.buy_status : 'AREA'}}</pv-tag>
-          </template>
-        </pv-column>
-        <pv-column
-            v-if="informationGroups_grandparents.length === 1"
-            :expander="true"
-
-            style="width: 3rem"
-        ></pv-column>
-        <pv-column v-else :exportable="false" style="min-width: 3rem">
+        <pv-column :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
+            <pv-dialog
+                :header="`Question ${question.question_id}`"
+                v-model:visible="questionDialog"
+                :breakpoints="{ '960px': '75vw' }"
+                :style="{ width: '50vw' }"
+                :modal="true"
+            >
+              <div class="field justify-left">
+                <pv-panel header="Question">
+                  {{question.content}}
+                </pv-panel>
+              </div>
+              <pv-panel header="Answer" v-if="question.answer.length !== 0">
+                {{question.answer[0].content}}
+              </pv-panel>
+              <div v-else class="field">
+                <label>Answer</label>
+                <pv-textarea :autoResize="true" rows="2" cols="70"></pv-textarea>
+              </div>
+              <template #footer>
+                <pv-button v-if="question.answer.length === 0" label="Send Answer" class="p-button-outlined"></pv-button>
+              </template>
+            </pv-dialog>
             <pv-button
                 icon="pi pi-chevron-right"
                 label="Go"
-                v-if="informationGroups_grandparents.length !== 1"
                 class="mr-2"
-                severity="success"
+                severity="info"
                 rounded
-                @click="changeInformationGroup(slotProps.data.identifier)"
+                @click="openQuestion(slotProps.data)"
             />
           </template>
         </pv-column>
-        <template #expansion="slotProps">
-          <div
-              v-if="slotProps.data.children.length !== 0"
-              class="p-3"
-          >
-            <h5>Documents:</h5>
-            <pv-data-table
-                :value="slotProps.data.children"
-            >
-              <pv-column
-                  field="file_name"
-                  header="Filename"
-                  :sortable="true"
-              ></pv-column>
-              <pv-column
-                  field="file_name"
-                  header="Go To File"
-              >
-                <template #body="slotProps">
-                  <pv-button
-                      label="See File"
-                      icon="pi pi-chevron-right"
-                      class="mr-2"
-                      severity="info"
-                      rounded
-                      @click=""
-                  />
-                </template>
-              </pv-column>
-            </pv-data-table>
-          </div>
-        </template>
       </pv-data-table>
     </div>
   </div>

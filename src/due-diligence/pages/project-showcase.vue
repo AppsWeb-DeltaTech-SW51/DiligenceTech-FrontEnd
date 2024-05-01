@@ -96,11 +96,12 @@ export default {
           .then((url) => {
             // Create
             this.documentsService.create({
-              project_id: this.$props.project_id,
-              informationGroup_id: this.newDocuments.informationGroup_id,
-              file_name: this.$refs.myFile.files[0].name,
-              file_url: url,
+              project_id: 'xd',
+              informationGroup_id: 'xd',
+              file_name: 'xd',
+              file_url: 'xd',
             });
+            /*
             // Update on InformationGroups in here
             this.informationGroups.forEach((informationGroup) => {
               if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
@@ -122,9 +123,9 @@ export default {
                 });
               }
             });
+            */
           });
       // Close Dialog
-      this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
     },
     // Firebase Basic
     uploadBasic: function() {
