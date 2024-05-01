@@ -2,12 +2,15 @@
 import {InformationGroupApiService} from "../services/informationGroup-api.service.js";
 import {DocumentsApiService} from "../services/documents-api.service.js";
 import { storage } from "../../firebase.js";
+import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
 
 export default {
   name: "project-showcase",
   props: ['id','user', 'project_id','userTeam','user_type','insideProject'],
   data() {
     return {
+      // Firebase
+      myFile: null,
       // Props
       user_local: this.user,
       userTeam_local: this.userTeam,
@@ -15,6 +18,7 @@ export default {
       // Dialogs
       newInformationItemDialog: false,
       newDocumentsDialog: false,
+      newAreaDialog: false,
       // Else
       informationGroups: [],
       informationGroups_parent: null,
@@ -77,6 +81,37 @@ export default {
     this.next_number = this.getNextNumber(1);
   },
   methods: {
+    // Firebase
+    upload: function() {
+      // Normal Upload
+      const storageRef = ref(storage, 'vue/' + this.$refs.myFile.files[0].name);
+      uploadBytes(storageRef, this.$refs.myFile.files[0])
+          .then((snapshot) => {
+            console.log('uploaded');
+          });
+      // Include Reference in Database through POST
+      getDownloadURL(ref(storageRef))
+          .then((url) => {
+            this.documentsService.create({
+              project_id: this.$props.project_id,
+              informationGroup_id: this.newDocuments.informationGroup_id,
+              file_name: this.$refs.myFile.files[0].name,
+              file_url: url,
+            });
+          });
+
+      // Reset router to observe the newborn
+      this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
+    },
+    // Firebase Basic
+    uploadBasic: function() {
+      const storageRef = ref(storage, 'vue/' + this.$refs.myFileBasic.files[0].name);
+      uploadBytes(storageRef, this.$refs.myFileBasic.files[0])
+          .then((snapshot) => {
+            console.log('uploaded');
+          });
+    },
+    // Else
     changeInformationGroup(group_id) {
       // delete focus' informationGroups
       while (this.informationGroups_focused.length != 0) {
@@ -117,6 +152,10 @@ export default {
       this.next_number = this.getNextNumber(1);
     },
     revertInformationGroup() {
+      if (this.informationGroups_parent === null) {
+        this.$router.push(`/${this.user_local.id}/workspace`);
+        this.insideProject_local = false;
+      }
       // delete focus' informationGroups
       while (this.informationGroups_focused.length != 0) {
         this.informationGroups_focused.pop();
@@ -159,19 +198,14 @@ export default {
                 }
             );
           });
-      this.next_number = this.getNextNumber(1);
     },
     // Documents Dialog
     openNewDocumentsDialog() {
       this.newDocumentsDialog = true;
     },
-    addDocuments() {
-      // (1) Add to Firebase
-
-      // (2) Add reference to JSON
-
-      // (3) Close Dialog
-
+    // Area Dialog
+    openNewAreaDialog() {
+      this.newAreaDialog = true;
     },
     // Information Item Dialog
     openNewInformationItemDialog() {
@@ -196,6 +230,25 @@ export default {
             return number;
           });
       return number;
+    },
+    createArea() {
+      // POST in db
+      this.informationGroupsService.create({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.name,
+        "name": this.informationItem.name,
+        "parent": null,
+        "buy_status": null,
+        "sell_status": null
+      });
+      // Change visualization again
+      this.changeInformationGroup(this.informationGroups_parent);
+      // Delete content used for next creation
+      this.informationItem.identifier = null;
+      this.informationItem.parent = null;
+      this.informationItem.name = '';
+      // Get out of Dialog
+      this.newInformationItemDialog = false;
     },
     createInformationItem() {
       // transform into possible information group
@@ -300,14 +353,40 @@ export default {
             </div>
             <div class="field">
               <label for="item_desc" class="block">Item Description</label>
+              <pv-textarea id="item_desc" v-model="this.informationItem.name" placeholder="Write wanted documents" :autoResize="true" rows="5" cols="36" />
+            </div>
+            <template #footer>
+              <pv-button label="Create Item" @click="createInformationItem" icon="pi pi-check" class="p-button-outlined"></pv-button>
+            </template>
+          </pv-dialog>
+          <pv-dialog
+              header="New Area"
+              v-model:visible="newAreaDialog"
+              :breakpoints="{ '960px': '75vw' }"
+              :style="{ width: '30vw' }"
+              :modal="true"
+          >
+            <div class="field">
+              <label for="parent" class="block">Create inside:</label>
+              <pv-input-text id="parent" :placeholder="this.informationGroups_parent === null ? 'None' : this.informationGroups_parent" type="text" :disabled="true"/>
+            </div>
+            <div class="field">
+              <label for="item_desc" class="block">Item Name</label>
               <pv-textarea id="item_desc" v-model="this.informationItem.name" placeholder="Escribir documentos deseados" :autoResize="true" rows="5" cols="36" />
             </div>
             <template #footer>
-              <pv-button label="Login" @click="createInformationItem" icon="pi pi-check" class="p-button-outlined"></pv-button>
+              <pv-button label="Create Area" @click="createArea" icon="pi pi-check" class="p-button-outlined"></pv-button>
             </template>
           </pv-dialog>
           <pv-button
-              v-if="this.$props.user_type === 'buy_side'"
+              v-if="this.$props.user_type === 'buy_side' && this.informationGroups_grandparents.length !== 1"
+              label="New Area"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openNewAreaDialog"
+          />
+          <pv-button
+              v-else-if="this.$props.user_type === 'buy_side'"
               label="New Information Item"
               icon="pi pi-plus"
               class="p-button-success mr-2"
@@ -319,6 +398,7 @@ export default {
               icon="pi pi-plus"
               class="p-button-info mr-2"
               @click="openNewDocumentsDialog"
+              :disabled="this.informationGroups_grandparents.length !== 1"
           />
           <pv-dialog
               header="Add Documents"
@@ -332,11 +412,8 @@ export default {
               <pv-dropdown id="owner" v-model="newDocuments.informationGroup_id" :options="informationGroups_id"></pv-dropdown>
             </div>
             <div class="field">
-              <pv-file-upload accept=".csv,.xls,.xlsx,.pdf"></pv-file-upload>
+              <pv-file-upload ref="myFile" custom-upload @uploader="upload" accept=".csv,.xls,.xlsx,.pdf"></pv-file-upload>
             </div>
-            <template #footer>
-              <pv-button label="Login" @click="" icon="pi pi-check" class="p-button-outlined"></pv-button>
-            </template>
           </pv-dialog>
         </template>
         <template #end>
@@ -445,14 +522,19 @@ md:justify-content-between">
                   header="Go To File"
               >
                 <template #body="slotProps">
-                  <pv-button
-                      label="See File"
+                  <a
+                    :href="slotProps.data.file_url"
+                    target="_blank"
+                  >
+                    <pv-button
+                      label="Download File"
                       icon="pi pi-chevron-right"
                       class="mr-2"
                       severity="info"
                       rounded
                       @click=""
-                  />
+                    />
+                  </a>
                 </template>
               </pv-column>
             </pv-data-table>

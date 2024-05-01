@@ -38,6 +38,7 @@ const router = createRouter({
                 {
                     path: '/:id/project_creation',
                     name: 'project_creation',
+                    component: () => import('../pending-projects/pages/pending-projects.vue'),
                     props: true,
                 },
                 {

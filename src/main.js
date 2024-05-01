@@ -35,6 +35,7 @@ import Dialog from "primevue/dialog";
 import Textarea from "primevue/textarea";
 import FileUpload from "primevue/fileupload";
 import Dropdown from "primevue/dropdown";
+import InputSwitch from "primevue/inputswitch";
 
 createApp(App)
     .use(router)
@@ -42,6 +43,7 @@ createApp(App)
     .use(ToastService)
     .component('pv-tag', Tag)
     .component('pv-column', Column)
+    .component('pv-input-switch', InputSwitch)
     .component('pv-dropdown', Dropdown)
     .component('pv-file-upload', FileUpload)
     .component('pv-dialog', Dialog)

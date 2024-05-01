@@ -38,7 +38,7 @@ export default {
     },
     createAgent() {
       if (this.signingUp.id.charAt(0) === 'u' && this.signingUp.id.length === 10) {
-        // creates (doesnt check if it already exists)
+        // creates (doesn't check if it already exists)
         this.signingUp.image = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
         this.agentsApi.create(this.signingUp);
         this.$router.push(`/${this.signingUp.id}/workspace`);

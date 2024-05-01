@@ -42,8 +42,13 @@
     },
     {
       "id": "PJ1818",
-      "username": "Project Acabado",
+      "name": "Project Acabado",
       "date_published": "05-03-2024"
+    },
+    {
+      "id": "PJ3555",
+      "name": "Project Ronaldo",
+      "date_published": "3-4-2024"
     }
   ],
   "dueDiligenceProjects": [
@@ -129,20 +134,33 @@
       "buy_status": "None",
       "sell_status": "None",
       "id": 5
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "Tributario",
+      "name": "Tributario",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 6
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "1",
+      "name": "Documentos Tributarios del 2015",
+      "parent": "Tributario",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 7
     }
   ],
   "document": [
     {
       "project_id": "PJ2122",
-      "informationGroup_id": "1",
-      "file_name": "comprobantes-2023.xlsx",
-      "file_url": ""
-    },
-    {
-      "project_id": "PJ2122",
-      "informationGroup_id": "1",
-      "file_name": "comprobantes-2022.xlsx",
-      "file_url": ""
+      "informationGroup_id": "2",
+      "file_name": "Formato de solicitud de cambio de nota 2023 u202218227.pdf",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2FFormato%20de%20solicitud%20de%20cambio%20de%20nota%202023%20u202218227.pdf?alt=media&token=87dc9481-5da3-4e11-b193-3d164beedd92",
+      "id": 1
     }
   ]
 }

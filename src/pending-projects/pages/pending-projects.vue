@@ -1,51 +1,37 @@
 <script>
-import {DueDiligenceProjectsApiService} from "../services/due-diligence-projects-api.service.js";
+import {PendingProjectsApiService} from "../services/pending-projects-api.service.js";
 
 export default {
-  name: "my-projects",
+  name: "pending-projects",
   props: ['id','user','userTeam'],
   data() {
     return {
       // Props
       user_local: this.user,
       userTeam_local: this.userTeam,
+      chosenTeam: false,
+      // Dialogs
+      newProjectDialog: false,
+      opponent: '',
+      project_name: '',
+      code: '',
       // Else
       projects: [],
       myProjects: [],
       project: {},
       selectedProjects: null,
-      projectsService: null,
+      pendingProjectsService: null,
     };
   },
   created() {
     this.$emit('openGeneralDashboard');
     this.userTeam_local = null;
-    this.projectsService = new DueDiligenceProjectsApiService();
-    this.projectsService.getAll()
+    this.pendingProjectsService = new PendingProjectsApiService();
+    this.pendingProjectsService.getAll()
         .then((response) => {
           this.projects = response.data;
-          this.projects.forEach(
-              project => {
-                project.buy_side_agents_id.forEach(
-                  buyAgents => {
-                    if (buyAgents === this.$props.id) {
-                      project.user_type = "Buy Side";
-                      this.myProjects.push(project);
-                    }
-                  }
-                );
-                project.sell_side_agents_id.forEach(
-                    sellAgents => {
-                      if (sellAgents === this.$props.id) {
-                        project.user_type = "Sell Side";
-                        this.myProjects.push(project);
-                      }
-                    }
-                );
-                console.log(project.buy_side_agents_id);
-                console.log(project.sell_side_agents_id);
-              }
-          );
+          console.log(response.data);
+
         });
   },
   methods: {
@@ -53,11 +39,27 @@ export default {
       this.userTeam_local = team;
       this.$emit('openProjectDashboard');
     },
+    newProject() {
+      let date = new Date();
+      // POST pending project
+      this.pendingProjectsService.create({
+        id: this.code,
+        name: this.project_name,
+        date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+      });
+      // POST invitations
+
+      // Close
+      this.newProjectDialog = false;
+    },
     viewUserType(team) {
       if (team === "Buy Side")
         return "buy_side";
       else
         return "sell_side";
+    },
+    openNewProjectDialog() {
+      this.newProjectDialog = true;
     },
   },
 };
@@ -68,18 +70,44 @@ export default {
     <div class="card">
       <pv-toolbar class="mb-4 border-2">
         <template #start>
-          <h3>My Projects</h3>
+          <h3>My Pending Projects</h3>
         </template>
         <template #end>
         </template>
       </pv-toolbar>
+      <pv-dialog
+          header="New Project"
+          v-model:visible="newProjectDialog"
+          :breakpoints="{ '960px': '75vw' }"
+          :style="{ width: '30vw' }"
+          :modal="true"
+      >
+        <div class="field">
+          <label for="code" class="block">Code (PJ + 4 numbers):</label>
+          <pv-input-text id="code" v-model="code" placeholder="PJ" type="text"/>
+        </div>
+        <div class="field">
+          <label for="name" class="block">Project Name:</label>
+          <pv-input-text id="name" v-model="project_name" placeholder="Project" type="text"/>
+        </div>
+        <div class="field">
+          <label for="team" class="mr-4">Buy-Side - Sell-Side:</label>
+          <pv-input-switch v-model="chosenTeam"></pv-input-switch>
+        </div>
+        <div class="field">
+          <label for="team" class="block">Opposing Agent Code (U + 9 numbers):</label>
+          <pv-input-text v-model="opponent" id="opponent" placeholder="U" type="text"/>
+        </div>
+        <template #footer>
+          <pv-button label="Create Pending Project" class="p-button-outlined" @click="newProject"></pv-button>
+        </template>
+      </pv-dialog>
       <pv-toolbar class="mb-4 bg-gray-900">
         <template #start>
           <pv-button
-              label=""
+              label="New Project"
               class="p-button-warning mr-2"
-              @click=""
-              :disabled="true"
+              @click="openNewProjectDialog"
           />
         </template>
         <template #end>
@@ -90,7 +118,7 @@ export default {
 
       <pv-data-table
           ref="dt"
-          :value="myProjects"
+          :value="projects"
           v-model:selection="selectedProjects"
           dataKey="id"
           :paginator="true"
@@ -106,7 +134,7 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         <template #header>
           <div class="table-header flex flex-column md:flex-row
 md:justify-content-between">
-            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">My Projects</h5>
+            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">My Pending Projects</h5>
           </div>
         </template>
         <pv-column
@@ -128,33 +156,23 @@ md:justify-content-between">
             style="min-width: 8rem"
         ></pv-column>
         <pv-column
-            field="date_edited"
-            header="Date Edited"
-            :sortable="true"
-            style="min-width: 8rem"
-        ></pv-column>
-        <pv-column
             field="user_type"
             header="My Team"
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
-        <pv-column :exportable="false" style="min-width: 3rem">
-          <template #body="slotProps">
-            <router-link
-                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
-            >
-              <pv-button
-                  icon="pi pi-chevron-right"
-                  class="mr-2"
-                  severity="success"
-                  rounded
-                  @click="goingToProject(slotProps.data.user_type)"
-              />
-            </router-link>
-
-          </template>
-        </pv-column>
+        <pv-column
+            field="user_type"
+            header="Sell-Side Confirms"
+            :sortable="true"
+            style="min-width: 8rem"
+        ></pv-column>
+        <pv-column
+            field="user_type"
+            header="Buy-Side Confirms"
+            :sortable="true"
+            style="min-width: 8rem"
+        ></pv-column>
       </pv-data-table>
     </div>
   </div>
