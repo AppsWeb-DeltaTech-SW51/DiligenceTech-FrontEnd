@@ -1,5 +1,6 @@
 <script>
 import {PendingProjectsApiService} from "../services/pending-projects-api.service.js";
+import {InvitationsApiService} from "../services/invitations-api.service.js";
 
 export default {
   name: "pending-projects",
@@ -21,19 +22,41 @@ export default {
       project: {},
       selectedProjects: null,
       pendingProjectsService: null,
+      invitationsService: null,
     };
   },
   created() {
     this.$emit('openGeneralDashboard');
     this.userTeam_local = null;
     this.pendingProjectsService = new PendingProjectsApiService();
+    this.invitationsService = new InvitationsApiService();
+    // Getting all
     this.pendingProjectsService.getAll()
         .then((response) => {
           response.data.forEach(
-              (pending_project) => {
+              pending_project => {
+                this.invitationsService.getByProject(pending_project.id)
+                    .then((response) => {
+                      response.data.forEach(invitation => {
+                        if (invitation.user_id === this.$props.id) {
+                          this.projects.push(pending_project);
+                          this.projects[this.projects.length - 1].team = this.team_html(invitation.team);
+                          this.projects[this.projects.length - 1].teamConfirm = (invitation.confirmation);
+                          this.projects[this.projects.length - 1].sell_confirms = [];
+                          this.projects[this.projects.length - 1].buy_confirms = [];
+                          response.data.forEach(posibleParticipant => {
+                            if(this.projects[this.projects.length - 1].id === posibleParticipant.project_id && posibleParticipant.team === 'sell_side') {
+                              this.projects[this.projects.length - 1].sell_confirms.push(posibleParticipant.confirmation);
+                            }
+                            if(this.projects[this.projects.length - 1].id === posibleParticipant.project_id && posibleParticipant.team === 'buy_side') {
+                              this.projects[this.projects.length - 1].buy_confirms.push(posibleParticipant.confirmation);
+                            }
+                          });
+                        }
+                      });
 
+                    });
           });
-          this.projects = response.data;
           console.log(response.data);
 
         });
@@ -62,9 +85,61 @@ export default {
       else
         return "sell_side";
     },
+    team_html(team) {
+      if (team === "buy_side")
+        return "Buy Side";
+      else
+        return "Sell Side";
+    },
     openNewProjectDialog() {
       this.newProjectDialog = true;
     },
+    // Confirming
+    changeConfirm(value, slotProps_user, slotProps_project, team) {
+      // update on view
+      this.projects.forEach(project => {
+        if (project.id === slotProps_project) {
+          let bool = true;
+          if (team === 'Buy Side') {
+            project.buy_confirms.forEach((confirmation, index) => {
+              if (bool && confirmation === value) {
+                console.log('buy side');
+                project.buy_confirms[index] = !value;
+                bool = false;
+              }
+            });
+          }
+          else {
+            project.sell_confirms.forEach((confirmation, index) => {
+              if (bool && confirmation === value) {
+                console.log('sell side');
+                project.sell_confirms[index] = !value;
+                bool = false;
+              }
+            });
+          }
+        }
+      });
+      // update
+      this.invitationsService.update(slotProps_project, {
+        user_id: "u202111654",
+        project_id: "PJ5757",
+        team: "buy_side",
+        confirmation: true
+      });
+      this.invitationsService.getInvitation(slotProps_project, slotProps_user)
+          .then((response) => {
+            response.data.forEach(invitation => {
+              this.invitationsService.update(invitation.id, {
+                user_id: slotProps_user,
+                project_id: slotProps_project,
+                team: team === 'Buy Side' ? 'buy_side' : 'sell_side',
+                confirmation: !value
+              });
+            });
+          });
+      return !value;
+    }
   },
 };
 </script>
@@ -160,19 +235,31 @@ md:justify-content-between">
             style="min-width: 8rem"
         ></pv-column>
         <pv-column
-            field="user_type"
+            field="team"
             header="My Team"
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
+        <pv-column header="Confirm" :exportable="false" style="min-width: 3rem">
+          <template #body="slotProps">
+            <pv-button
+                icon="pi pi-chevron-right"
+                :label="slotProps.data.teamConfirm ? 'Deconfirm' : 'Confirm' "
+                class="mr-2 p-button-outlined"
+                :severity="slotProps.data.teamConfirm ? 'danger' : 'success'"
+                rounded
+                @click="slotProps.data.teamConfirm = changeConfirm(slotProps.data.teamConfirm,this.$props.id,slotProps.data.id,slotProps.data.team)"
+            />
+          </template>
+        </pv-column>
         <pv-column
-            field="user_type"
+            field="sell_confirms"
             header="Sell-Side Confirms"
             :sortable="true"
             style="min-width: 8rem"
         ></pv-column>
         <pv-column
-            field="user_type"
+            field="buy_confirms"
             header="Buy-Side Confirms"
             :sortable="true"
             style="min-width: 8rem"

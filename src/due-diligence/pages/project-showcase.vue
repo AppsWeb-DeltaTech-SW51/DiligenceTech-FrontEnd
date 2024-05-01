@@ -19,6 +19,8 @@ export default {
       newInformationItemDialog: false,
       newDocumentsDialog: false,
       newAreaDialog: false,
+      changeBuyStatusDialog: false,
+      changeSellStatusDialog: false,
       // Else
       informationGroups: [],
       informationGroups_parent: null,
@@ -92,15 +94,36 @@ export default {
       // Include Reference in Database through POST
       getDownloadURL(ref(storageRef))
           .then((url) => {
+            // Create
             this.documentsService.create({
               project_id: this.$props.project_id,
               informationGroup_id: this.newDocuments.informationGroup_id,
               file_name: this.$refs.myFile.files[0].name,
               file_url: url,
             });
+            // Update on InformationGroups in here
+            this.informationGroups.forEach((informationGroup) => {
+              if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+                informationGroup.children.push({
+                  project_id: this.$props.project_id,
+                  informationGroup_id: this.newDocuments.informationGroup_id,
+                  file_name: this.$refs.myFile.files[0].name,
+                  file_url: url,
+                });
+              }
+            });
+            this.informationGroups_focused.forEach((informationGroup) => {
+              if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+                informationGroup.children.push({
+                  project_id: this.$props.project_id,
+                  informationGroup_id: this.newDocuments.informationGroup_id,
+                  file_name: this.$refs.myFile.files[0].name,
+                  file_url: url,
+                });
+              }
+            });
           });
-
-      // Reset router to observe the newborn
+      // Close Dialog
       this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
     },
     // Firebase Basic
@@ -149,9 +172,12 @@ export default {
                 }
             );
           });
-      this.next_number = this.getNextNumber(1);
     },
     revertInformationGroup() {
+      if (this.informationGroups_grandparents.length === 0) {
+        this.$router.push(`/${this.user_local.id}/workspace`);
+        this.insideProject_local = false;
+      }
       if (this.informationGroups_parent === null) {
         this.$router.push(`/${this.user_local.id}/workspace`);
         this.insideProject_local = false;
@@ -199,6 +225,13 @@ export default {
             );
           });
     },
+    // Change Status Dialog
+    openBuyStatusDialog() {
+      this.changeBuyStatusDialog = true;
+    },
+    openSellStatusDialog() {
+      this.changeSellStatusDialog = true;
+    },
     // Documents Dialog
     openNewDocumentsDialog() {
       this.newDocumentsDialog = true;
@@ -241,8 +274,22 @@ export default {
         "buy_status": null,
         "sell_status": null
       });
-      // Change visualization again
-      this.changeInformationGroup(this.informationGroups_parent);
+      this.informationGroups_focused.push({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.name,
+        "name": this.informationItem.name,
+        "parent": null,
+        "buy_status": null,
+        "sell_status": null
+      });
+      this.informationGroups.push({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.name,
+        "name": this.informationItem.name,
+        "parent": null,
+        "buy_status": null,
+        "sell_status": null
+      });
       // Delete content used for next creation
       this.informationItem.identifier = null;
       this.informationItem.parent = null;
@@ -271,42 +318,42 @@ export default {
       //// get parent
       this.informationItem.parent = this.informationGroups_parent;
       // POST in db
-      this.informationGroupsService.create(this.informationItem);
-      // Change visualization again
-      this.changeInformationGroup(this.informationGroups_parent);
+      this.informationGroupsService.create({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.identifier,
+        "name": this.informationItem.name,
+        "parent": this.informationItem.parent,
+        "buy_status": this.informationItem.buy_status,
+        "sell_status": this.informationItem.sell_status
+      });
+      this.informationGroups_focused.push({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.identifier,
+        "name": this.informationItem.name,
+        "parent": this.informationItem.parent,
+        "buy_status": this.informationItem.buy_status,
+        "sell_status": this.informationItem.sell_status
+      });
+      this.informationGroups.push({
+        "project_id": this.$props.project_id,
+        "identifier": this.informationItem.identifier,
+        "name": this.informationItem.name,
+        "parent": this.informationItem.parent,
+        "buy_status": this.informationItem.buy_status,
+        "sell_status": this.informationItem.sell_status
+      });
       // Delete content used for next creation
       this.informationItem.identifier = null;
       this.informationItem.parent = null;
       this.informationItem.name = '';
       // Get out of Dialog
       this.newInformationItemDialog = false;
-      // Refresh (for now)
-      this.$router;
     },
     htmlUserType(team) {
       if (team === "buy_side")
         return "Buy Side";
       else
         return "Sell Side";
-    },
-    getArea(identifier) {
-      if (identifier === 'Financiero') {
-        return true;
-      }
-      if (identifier === 'Tributario') {
-        return true;
-      }
-      if (identifier === 'Laboral') {
-        return true;
-      }
-      if (identifier === 'Legal') {
-        return true;
-      }
-      return false;
-    },
-    expandedDesired(desiredRow) {
-      this.expandedRows.push(desiredRow);
-      this.state.expandedRows
     },
     getStatusSeverity(status) {
       switch (status) {
@@ -464,6 +511,45 @@ md:justify-content-between">
             :sortable="true"
             style="min-width: 10rem"
         ></pv-column>
+        <pv-column :exportable="false" style="min-width: 3rem">
+          <template #body="slotProps">
+            <pv-dialog
+                header="Change Buy-Side Status"
+                v-model:visible="changeBuyStatusDialog"
+                :breakpoints="{ '960px': '75vw' }"
+                :style="{ width: '30vw' }"
+                :modal="true"
+            >
+              <pv-dropdown id="status" v-model="slotProps.data.buy_status" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+            </pv-dialog>
+            <pv-dialog
+                header="Change Sell-Side Status"
+                v-model:visible="changeSellStatusDialog"
+                :breakpoints="{ '960px': '75vw' }"
+                :style="{ width: '30vw' }"
+                :modal="true"
+            >
+              <pv-dropdown id="status" v-model="slotProps.data.sell_status" :options="['Done', 'In Progress', 'None']"></pv-dropdown>
+            </pv-dialog>
+            <pv-button
+                label="Change Status"
+                v-if="informationGroups_grandparents.length === 1 && this.$route.params.user_type === 'sell_side'"
+                class="mr-2 p-button-outlined"
+                severity="info"
+                rounded
+                @click="openSellStatusDialog"
+            />
+            <pv-button
+                icon="pi pi-chevron-right"
+                label="Change Status"
+                v-else-if="informationGroups_grandparents.length === 1"
+                class="mr-2 p-button-outlined"
+                severity="info"
+                rounded
+                @click="openBuyStatusDialog"
+            />
+          </template>
+        </pv-column>
         <pv-column
             field="sell_status"
             header="Sell-Side Status"

@@ -116,50 +116,8 @@ export default {
           });
       this.next_number = this.getNextNumber(1);
     },
-    revertInformationGroup() {
-      // delete focus' informationGroups
-      while (this.informationGroups_focused.length != 0) {
-        this.informationGroups_focused.pop();
-        this.informationGroups_id.pop();
-      }
-      // change value of father
-      if (this.informationGroups_grandparents.length != 0) {
-        this.informationGroups_parent = this.informationGroups_grandparents[this.informationGroups_grandparents.length - 1];
-        this.informationGroups_grandparents.pop();
-      }
-      else {
-        this.$router.push(`/${this.user_local.id}/workspace`);
-        this.insideProject_local = false;
-      }
-      // add new focus' informationGroups
-      this.informationGroupsService.getByProject(this.$props.project_id)
-          .then((response) => {
-            this.informationGroups.forEach(
-                informationGroup => {
-                  if (informationGroup.parent === this.informationGroups_parent) {
-                    // include in showcase
-                    this.informationGroups_focused.push(informationGroup);
-                    this.informationGroups_id.push(informationGroup.identifier);
-                    // show documents
-                    this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          informationGroup.children = response.data;
-                        });
-                    // see if it has children
-                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          if(response.data.length === 0) {
-                            informationGroup.has_children = false;
-                          }
-                          else {
-                            informationGroup.has_children = true;
-                          }
-                        });
-                  }
-                }
-            );
-          });
-      this.next_number = this.getNextNumber(1);
+    returnToMyProjects() {
+      this.$router.push(`/${this.user_local.id}/workspace`);
     },
     // Documents Dialog
     openNewDocumentsDialog() {
@@ -347,7 +305,7 @@ md:justify-content-between">
                 class="mr-2"
                 severity="warning"
                 rounded
-                @click="revertInformationGroup"
+                @click="returnToMyProjects"
             />
           </div>
         </template>

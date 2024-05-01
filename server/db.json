@@ -26,11 +26,29 @@
     {
       "user_id": "u202111654",
       "project_id": "PJ5757",
+      "team": "buy_side",
+      "confirmation": true,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "user_id": "u202218227",
+      "project_id": "PJ5757",
+      "team": "sell_side",
+      "confirmation": false
+    },
+    {
+      "id": 3,
+      "user_id": "u202111654",
+      "project_id": "PJ1818",
+      "team": "buy_side",
       "confirmation": true
     },
     {
+      "id": 4,
       "user_id": "u202218227",
-      "project_id": "PJ5757",
+      "project_id": "PJ1818",
+      "team": "sell_side",
       "confirmation": false
     }
   ],
@@ -157,6 +175,15 @@
       "buy_status": "None",
       "sell_status": "None",
       "id": 7
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "Operacional",
+      "name": "Operacional",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 8
     }
   ],
   "document": [
@@ -166,6 +193,20 @@
       "file_name": "Formato de solicitud de cambio de nota 2023 u202218227.pdf",
       "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2FFormato%20de%20solicitud%20de%20cambio%20de%20nota%202023%20u202218227.pdf?alt=media&token=87dc9481-5da3-4e11-b193-3d164beedd92",
       "id": 1
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": "1",
+      "file_name": "upc-pre-202202-si400-examen-final.pdf",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2Fupc-pre-202202-si400-examen-final.pdf?alt=media&token=be97fe9c-f919-45a3-9170-0006a04d0a20",
+      "id": 2
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": "1",
+      "file_name": "upc-pre-202301-si397-si33-START Group-performance-tf.pdf",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2Fupc-pre-202301-si397-si33-START%20Group-performance-tf.pdf?alt=media&token=602eb93d-0c69-4e55-bb21-6867925d3d16",
+      "id": 3
     }
   ]
 }

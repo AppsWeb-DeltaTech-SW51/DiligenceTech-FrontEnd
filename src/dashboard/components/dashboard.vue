@@ -31,6 +31,10 @@ export default {
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
       <span class="text-white text">{{ item.label }}</span>
     </router-link>
+    <router-link :key="Log-Out" to="/login"
+                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+      <span class="text-white text">Log-Out</span>
+    </router-link>
   </div>
   <div
       v-else
@@ -39,6 +43,10 @@ export default {
     <router-link v-for="item in project_items" :key="item.label" :to="item.to"
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
       <span class="text-white text">{{ item.label }}</span>
+    </router-link>
+    <router-link :key="Log-Out" to="/login"
+                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+      <span class="text-white text">Log-Out</span>
     </router-link>
   </div>
 </template>
