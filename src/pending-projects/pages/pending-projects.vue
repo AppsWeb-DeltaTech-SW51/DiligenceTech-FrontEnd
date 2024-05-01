@@ -29,6 +29,10 @@ export default {
     this.pendingProjectsService = new PendingProjectsApiService();
     this.pendingProjectsService.getAll()
         .then((response) => {
+          response.data.forEach(
+              (pending_project) => {
+
+          });
           this.projects = response.data;
           console.log(response.data);
 

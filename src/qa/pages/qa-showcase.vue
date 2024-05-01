@@ -308,11 +308,12 @@ export default {
             </template>
           </pv-dialog>
           <pv-button
-              v-if="this.$props.user_type === 'buy_side'"
               label="New Question"
               icon="pi pi-plus"
               class="p-button-info mr-2"
               @click="openNewInformationItemDialog"
+              :disabled=" !(this.$props.user_type === 'buy_side')"
+
           />
         </template>
         <template #end>
