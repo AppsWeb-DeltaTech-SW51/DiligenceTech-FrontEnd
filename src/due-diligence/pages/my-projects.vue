@@ -68,7 +68,7 @@ export default {
     <div class="card">
       <pv-toolbar class="mb-4 border-2">
         <template #start>
-          <h3>My Projects</h3>
+          <h3>Projects</h3>
         </template>
         <template #end>
         </template>

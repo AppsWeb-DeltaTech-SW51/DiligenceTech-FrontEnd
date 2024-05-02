@@ -62,10 +62,6 @@ export default {
         });
   },
   methods: {
-    goingToProject(team) {
-      this.userTeam_local = team;
-      this.$emit('openProjectDashboard');
-    },
     newProject() {
       let date = new Date();
       // POST pending project
@@ -74,10 +70,48 @@ export default {
         name: this.project_name,
         date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
       });
+      this.projects.push({
+        id: this.code,
+        name: this.project_name,
+        date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+        buy_confirms: [!this.chosenTeam],
+        sell_confirms: [this.chosenTeam],
+        team: this.chosenTeam ? 'sell_side' : 'buy_side',
+        teamConfirm: true,
+      });
+      console.log(this.projects)
       // POST invitations
-
-      // Close
+      //// self invitation
+      this.invitationsService.create({
+        user_id: this.$props.user.id,
+        project_id: this.code,
+        "team": this.chosenTeam ? 'sell_side' : 'buy_side',
+        "confirmation": true,
+      });
+      /*
+      this.projects[this.projects.length - 1].sell_confirms = [];
+      this.projects[this.projects.length - 1].sell_confirms.push({
+        user_id: this.$props.user,
+        project_id: this.project_name,
+        "team": this.chosenTeam ? 'buy_side' : 'sell_side',
+        "confirmation": true,
+      });
+      */
+      //// friend invitation
+      this.invitationsService.create({
+        user_id: this.opponent,
+        project_id: this.code,
+        "team": this.chosenTeam ? 'buy_side' : 'sell_side',
+        "confirmation": false,
+      });
       this.newProjectDialog = false;
+    },
+    confirmSeverity(count, max) {
+      if (count < max / 3)
+        return 'danger'
+      if (count < max / 6)
+        return 'warning'
+      return 'success'
     },
     viewUserType(team) {
       if (team === "Buy Side")
@@ -257,7 +291,7 @@ md:justify-content-between">
             style="min-width: 4rem"
         >
           <template #body="slotProps">
-            <pv-button :label="`${slotProps.data.sell_confirms.filter(Boolean).length}/${slotProps.data.sell_confirms.length}`"></pv-button>
+            <pv-button :severity="confirmSeverity(slotProps.data.sell_confirms.filter(Boolean).length, slotProps.data.sell_confirms.length)" :label="`${slotProps.data.sell_confirms.filter(Boolean).length}/${slotProps.data.sell_confirms.length}`"></pv-button>
           </template>
         </pv-column>
         <pv-column
@@ -265,7 +299,7 @@ md:justify-content-between">
             style="min-width: 4rem"
         >
           <template #body="slotProps">
-            <pv-button :label="`${slotProps.data.buy_confirms.filter(Boolean).length}/${slotProps.data.buy_confirms.length}`"></pv-button>
+            <pv-button :severity="confirmSeverity(slotProps.data.buy_confirms.filter(Boolean).length,slotProps.data.buy_confirms.length)" :label="`${slotProps.data.buy_confirms.filter(Boolean).length}/${slotProps.data.buy_confirms.length}`"></pv-button>
           </template>
         </pv-column>
       </pv-data-table>

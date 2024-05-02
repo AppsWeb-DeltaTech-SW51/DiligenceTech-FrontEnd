@@ -12,8 +12,8 @@ export default {
       language_switch: true,
       // Else
       items: [
-        { label: "My Projects", to: `/${this.$route.params.id}/workspace` },
-        { label: "Project Creation", to: `/${this.$route.params.id}/project_creation` },
+        { label: "Projects", to: `/${this.$route.params.id}/workspace` },
+        { label: "Pending Projects", to: `/${this.$route.params.id}/project_creation` },
       ],
       project_items: [
         { label: "Due Diligence", to: `/${this.$route.params.id}/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}` },

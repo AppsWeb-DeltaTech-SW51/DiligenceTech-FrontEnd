@@ -50,18 +50,144 @@
       "team": "sell_side",
       "confirmation": false,
       "id": 4
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ3555",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 5
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ3555",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 6
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ3556",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 7
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ3556",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 8
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ4445",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 9
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ4445",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 10
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ4441",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 11
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ4441",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 12
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ4440",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 13
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ4440",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 14
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ1111",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 15
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ1111",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 16
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ4431",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 17
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ4431",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 18
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ0001",
+      "team": "buy_side",
+      "confirmation": true,
+      "id": 19
+    },
+    {
+      "user_id": "U202218227",
+      "project_id": "PJ0001",
+      "team": "sell_side",
+      "confirmation": false,
+      "id": 20
+    },
+    {
+      "user_id": "u202218227",
+      "project_id": "PJ2004",
+      "team": "sell_side",
+      "confirmation": true,
+      "id": 21
+    },
+    {
+      "user_id": "u202111654",
+      "project_id": "PJ2004",
+      "team": "buy_side",
+      "confirmation": false,
+      "id": 22
     }
   ],
   "pendingProjects": [
     {
       "id": "PJ5757",
       "name": "Project Pepsi",
-      "date_published": "01-04-2024"
+      "date_published": "1-4-2024"
     },
     {
       "id": "PJ1818",
       "name": "Project Acabado",
-      "date_published": "05-03-2024"
+      "date_published": "5-3-2024"
     },
     {
       "id": "PJ3555",
@@ -70,7 +196,42 @@
     },
     {
       "id": "PJ3556",
-      "name": "Project Foxi",
+      "name": "Project Abel",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ4445",
+      "name": "Project MKPro",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ4441",
+      "name": "Project MM",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ4440",
+      "name": "Project Joqui",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ1111",
+      "name": "Project Mallma",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ4431",
+      "name": "Project LETS GO",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ0001",
+      "name": "Project Beta",
+      "date_published": "3-4-2024"
+    },
+    {
+      "id": "PJ2004",
+      "name": "Project Portugal",
       "date_published": "3-4-2024"
     }
   ],
@@ -78,8 +239,8 @@
     {
       "id": "PJ2122",
       "name": "Project Gloria",
-      "date_published": "10-02-2023",
-      "date_edited": "10-03-2023",
+      "date_published": "10-2-2023",
+      "date_edited": "10-3-2023",
       "sell_side_agents_id": [
         "u202111654"
       ],
@@ -90,8 +251,8 @@
     {
       "id": "PJ2121",
       "name": "Project Messi",
-      "date_published": "10-02-2023",
-      "date_edited": "10-03-2023",
+      "date_published": "10-2-2023",
+      "date_edited": "10-3-2023",
       "sell_side_agents_id": [
         "u202218227"
       ],
@@ -102,8 +263,8 @@
     {
       "id": "PJ2120",
       "name": "Project Peru",
-      "date_published": "10-02-2023",
-      "date_edited": "10-03-2023",
+      "date_published": "10-2-2023",
+      "date_edited": "10-3-2023",
       "sell_side_agents_id": [
         "u202111654"
       ],
@@ -173,8 +334,18 @@
       "identifier": "3",
       "name": "Libro de actas de Junta General de Accionistas",
       "parent": "Financiero",
-      "buy_status": "In Progress",
-      "sell_status": "In Progress"
+      "buy_status": "Done",
+      "sell_status": "In Progress",
+      "children": [
+        {
+          "project_id": "PJ2122",
+          "informationGroup_id": "3",
+          "file_name": "learning-center.pdf",
+          "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2Flearning-center.pdf?alt=media&token=876694a0-9b66-441c-ab2e-4771aab69efe",
+          "id": 4
+        }
+      ],
+      "has_children": false
     },
     {
       "project_id": "PJ2122",
@@ -238,6 +409,24 @@
       "buy_status": "None",
       "sell_status": "None",
       "id": 11
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "IT",
+      "name": "IT",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 12
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "1",
+      "name": "Compras de Productos IT del 2003-2023.",
+      "parent": "IT",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 13
     }
   ],
   "document": [
@@ -275,6 +464,13 @@
       "file_name": "Desktop - Product List.pdf",
       "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2FDesktop%20-%20Product%20List.pdf?alt=media&token=c3cfb414-50e9-4a7e-9390-b191be102b03",
       "id": 5
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": "5",
+      "file_name": "MA462_S14_2.pdf",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/vue%2FMA462_S14_2.pdf?alt=media&token=85b81b24-af5d-4466-89d7-acb72669c9be",
+      "id": 6
     }
   ],
   "questions": [
