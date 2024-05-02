@@ -10,6 +10,9 @@ export class InvitationsApiService extends BaseService {
 
     getInvitation(project_id, user_id) {
         return http.get(`${this.complementUrl}?project_id=${project_id}&user_id=${user_id}`);
-        'http://localhost:3000/agentProjectInvitation?project_id=PJ5757&user_id=u202111654';
+    }
+
+    deleteInvitation(project_id, user_id) {
+        return http.delete(`${this.complementUrl}?project_id=${project_id}&user_id=${user_id}`);
     }
 }

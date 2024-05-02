@@ -41,14 +41,14 @@
       "user_id": "u202111654",
       "project_id": "PJ1818",
       "team": "buy_side",
-      "confirmation": false,
+      "confirmation": true,
       "id": 3
     },
     {
       "user_id": "u202218227",
       "project_id": "PJ1818",
       "team": "sell_side",
-      "confirmation": false,
+      "confirmation": true,
       "id": 4
     },
     {
@@ -153,7 +153,7 @@
       "user_id": "u202111654",
       "project_id": "PJ0001",
       "team": "buy_side",
-      "confirmation": true,
+      "confirmation": false,
       "id": 19
     },
     {
@@ -165,17 +165,17 @@
     },
     {
       "user_id": "u202218227",
-      "project_id": "PJ2004",
+      "project_id": "PJ0023",
       "team": "sell_side",
       "confirmation": true,
-      "id": 21
+      "id": 23
     },
     {
-      "user_id": "u202111654",
-      "project_id": "PJ2004",
+      "user_id": "U202218226",
+      "project_id": "PJ0023",
       "team": "buy_side",
       "confirmation": false,
-      "id": 22
+      "id": 24
     }
   ],
   "pendingProjects": [
@@ -183,11 +183,6 @@
       "id": "PJ5757",
       "name": "Project Pepsi",
       "date_published": "1-4-2024"
-    },
-    {
-      "id": "PJ1818",
-      "name": "Project Acabado",
-      "date_published": "5-3-2024"
     },
     {
       "id": "PJ3555",
@@ -230,8 +225,8 @@
       "date_published": "3-4-2024"
     },
     {
-      "id": "PJ2004",
-      "name": "Project Portugal",
+      "id": "PJ0023",
+      "name": "Project Duell",
       "date_published": "3-4-2024"
     }
   ],
@@ -271,6 +266,30 @@
       "buy_side_agents_id": [
         "u202218226"
       ]
+    },
+    {
+      "id": "PJ2004",
+      "name": "Project Portugal",
+      "date_published": "3-4-2024",
+      "date_edited": "3-4-2024",
+      "sell_side_agents_id": [
+        "u202218227"
+      ],
+      "buy_side_agents_id": [
+        "u202111654"
+      ]
+    },
+    {
+      "id": "PJ1818",
+      "name": "Project Acabado",
+      "date_published": "3-4-2024",
+      "date_edited": "3-4-2024",
+      "sell_side_agents_id": [
+        "u202218227"
+      ],
+      "buy_side_agents_id": [
+        "u202111654"
+      ]
     }
   ],
   "informationGroup": [
@@ -289,7 +308,7 @@
       "identifier": "1",
       "name": "Balance de comprobación (en Excel) abierto al máximo nivel de dígitos (años 2015 al 2017)",
       "parent": "Financiero",
-      "buy_status": "None",
+      "buy_status": "Done",
       "sell_status": "Done",
       "children": [
         {
@@ -315,8 +334,8 @@
       "identifier": "2",
       "name": "Mayores analíticos de las cuentas contables por los años 2015 al 2017 (en formato Excel).",
       "parent": "Financiero",
-      "buy_status": "In Progress",
-      "sell_status": "None",
+      "buy_status": "Done",
+      "sell_status": "Done",
       "children": [
         {
           "project_id": "PJ2122",
@@ -376,15 +395,6 @@
     },
     {
       "project_id": "PJ2122",
-      "identifier": "Operacional",
-      "name": "Operacional",
-      "parent": null,
-      "buy_status": null,
-      "sell_status": null,
-      "id": 8
-    },
-    {
-      "project_id": "PJ2122",
       "identifier": "Legal",
       "name": "Legal",
       "parent": null,
@@ -427,6 +437,33 @@
       "buy_status": "None",
       "sell_status": "None",
       "id": 13
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "Operacional",
+      "name": "Operacional",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 14
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "Adicional",
+      "name": "Adicional",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 15
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "6",
+      "name": "Documentos financieros exclusivamente del 2018.",
+      "parent": "Financiero",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 16
     }
   ],
   "document": [

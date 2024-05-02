@@ -1,6 +1,7 @@
 <script>
 import {PendingProjectsApiService} from "../services/pending-projects-api.service.js";
 import {InvitationsApiService} from "../services/invitations-api.service.js";
+import {DueDiligenceProjectsApiService} from "../../due-diligence/services/due-diligence-projects-api.service.js";
 
 export default {
   name: "pending-projects",
@@ -23,6 +24,7 @@ export default {
       selectedProjects: null,
       pendingProjectsService: null,
       invitationsService: null,
+      projectsService: null,
     };
   },
   created() {
@@ -30,26 +32,32 @@ export default {
     this.userTeam_local = null;
     this.pendingProjectsService = new PendingProjectsApiService();
     this.invitationsService = new InvitationsApiService();
+    this.projectsService = new DueDiligenceProjectsApiService();
     // Getting all
     this.pendingProjectsService.getAll()
         .then((response) => {
           response.data.forEach(
               pending_project => {
                 this.invitationsService.getByProject(pending_project.id)
-                    .then((response) => {
-                      response.data.forEach(invitation => {
+                    .then((response2) => {
+                      response2.data.forEach(invitation => {
                         if (invitation.user_id === this.$props.id) {
+                          console.log('1');
                           this.projects.push(pending_project);
                           this.projects[this.projects.length - 1].team = this.team_html(invitation.team);
                           this.projects[this.projects.length - 1].teamConfirm = (invitation.confirmation);
                           this.projects[this.projects.length - 1].sell_confirms = [];
+                          this.projects[this.projects.length - 1].sell_ids = [];
                           this.projects[this.projects.length - 1].buy_confirms = [];
-                          response.data.forEach(posibleParticipant => {
+                          this.projects[this.projects.length - 1].buy_ids = [];
+                          response2.data.forEach(posibleParticipant => {
                             if(this.projects[this.projects.length - 1].id === posibleParticipant.project_id && posibleParticipant.team === 'sell_side') {
                               this.projects[this.projects.length - 1].sell_confirms.push(posibleParticipant.confirmation);
+                              this.projects[this.projects.length - 1].sell_ids.push(posibleParticipant.user_id);
                             }
                             if(this.projects[this.projects.length - 1].id === posibleParticipant.project_id && posibleParticipant.team === 'buy_side') {
                               this.projects[this.projects.length - 1].buy_confirms.push(posibleParticipant.confirmation);
+                              this.projects[this.projects.length - 1].buy_ids.push(posibleParticipant.user_id);
                             }
                           });
                         }
@@ -129,7 +137,7 @@ export default {
       this.newProjectDialog = true;
     },
     // Confirming
-    changeConfirm(value, slotProps_user, slotProps_project, team) {
+    changeConfirm(value, slotProps_user, slotProps_project, team,data) {
       // update on view
       this.projects.forEach(project => {
         if (project.id === slotProps_project) {
@@ -155,12 +163,6 @@ export default {
         }
       });
       // update
-      this.invitationsService.update(slotProps_project, {
-        user_id: "u202111654",
-        project_id: "PJ5757",
-        team: "buy_side",
-        confirmation: true
-      });
       this.invitationsService.getInvitation(slotProps_project, slotProps_user)
           .then((response) => {
             response.data.forEach(invitation => {
@@ -172,6 +174,40 @@ export default {
               });
             });
           });
+      // check must be removed
+      let date = new Date();
+      if (data.sell_confirms.length === data.sell_confirms.filter(Boolean).length && data.buy_confirms.length === data.buy_confirms.filter(Boolean).length) {
+        // previously hurray message (reference for the team)
+        console.log({
+          id: slotProps_project,
+          name: data.name,
+          date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+          date_edited: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+          sell_side_agents_id: data.sell_ids,
+          buy_side_agents_id: data.buy_ids,
+        });
+        // create usable project
+        this.projectsService.create({
+          id: slotProps_project,
+          name: data.name,
+          date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+          date_edited: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
+          sell_side_agents_id: data.sell_ids,
+          buy_side_agents_id: data.buy_ids,
+        });
+        // delete previous project
+        // from db
+        this.pendingProjectsService.delete(slotProps_project);
+        // from view
+        this.projects.forEach((projects, index) => {
+          if (this.projects.id === slotProps_project) {
+            this.projects.splice(index,1);
+          }
+        });
+        // delete invitations
+        this.invitationsService.deleteInvitation(slotProps_project, slotProps_user);
+      }
+      // go back (if its removed then maybe you shouldn't
       return !value;
     }
   },
@@ -282,7 +318,7 @@ md:justify-content-between">
                 class="mr-2 p-button-outlined"
                 :severity="slotProps.data.teamConfirm ? 'danger' : 'success'"
                 rounded
-                @click="slotProps.data.teamConfirm = changeConfirm(slotProps.data.teamConfirm,this.$props.id,slotProps.data.id,slotProps.data.team)"
+                @click="slotProps.data.teamConfirm = changeConfirm(slotProps.data.teamConfirm,this.$props.id,slotProps.data.id,slotProps.data.team,slotProps.data)"
             />
           </template>
         </pv-column>
