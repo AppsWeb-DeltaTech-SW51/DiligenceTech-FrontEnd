@@ -15,7 +15,8 @@ Single-Page Application for the DiligenceTech solution, a data-storage software 
 - PrimeVue: 
 - PrimeIcons: 
 - PrimeFlex: 
-- Axios: 
+- Axios:
+- Firebase: 
 
 ## Recommended IDE Setup
 
