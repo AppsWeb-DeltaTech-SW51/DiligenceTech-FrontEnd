@@ -32,7 +32,8 @@ export default {
 <template>
   <div
       v-if="!insideProject2"
-      class="col-2 border-3 w-48 bg-gray-900 text-white pt-4"
+      style="background-color:#131920; height:auto"
+      class="col-2  text-white pt-4 mt-2"
   >
     <router-link v-for="item in items" :key="item.label" :to="item.to"
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
@@ -46,7 +47,8 @@ export default {
   </div>
   <div
       v-else
-      class="col-2 border-3 w-48 bg-gray-900 text-white pt-4"
+      style="background-color:#131920;height:auto"
+      class="col-2    text-white pt-4 mt-2"
   >
     <router-link v-for="item in project_items" :key="item.label" :to="item.to"
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
@@ -57,12 +59,13 @@ export default {
                  class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
       <span class="text-white text">Log-Out</span>
     </router-link>
-  </div>
+  </div >
   <pv-dialog
+
       header="Settings"
       v-model:visible="settingsDialog"
       :breakpoints="{ '960px': '75vw' }"
-      :style="{ width: '30vw' }"
+
       :modal="true"
   >
     <div class="field mt-4">
@@ -85,6 +88,7 @@ export default {
       <label class="mr-5">Contact Support:</label>
       <pv-button label="Change" severity="info"></pv-button>
     </div>
+
   </pv-dialog>
 </template>
 

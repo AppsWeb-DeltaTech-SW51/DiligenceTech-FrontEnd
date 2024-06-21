@@ -104,7 +104,7 @@ export default {
 <template>
   <pv-toast />
   <header>
-    <pv-toolbar class="bg-gray-900">
+    <pv-toolbar style="background-color:#131920; border-radius:0px " class="">
       <template #start>
         <img width="70" class="p-image-toolbar" src="../assets/images/DiligenceTechImage.png">
         <h3 class="text-white">DiligenceTech</h3>
