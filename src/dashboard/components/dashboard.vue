@@ -12,12 +12,12 @@ export default {
       language_switch: true,
       // Else
       items: [
-        { label: "Projects", to: `/${this.$route.params.id}/workspace`, icon: 'pi-folder' },
-        { label: "Pending Projects", to: `/${this.$route.params.id}/project_creation`, icon: 'pi-clock' },
+        { label: "Projects", to: `/workspace`, icon: 'pi-folder' },
+        { label: "Pending Projects", to: `/project_creation`, icon: 'pi-clock' },
       ],
       project_items: [
-        { label: "Due Diligence", to: `/${this.$route.params.id}/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-search' },
-        { label: "Q&A", to: `/${this.$route.params.id}/qa/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-comments'},
+        { label: "Due Diligence", to: `/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-search' },
+        { label: "Q&A", to: `/qa/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-comments'},
       ],
     };
   },

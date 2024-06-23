@@ -28,7 +28,7 @@ export default {
               project => {
                 project.buy_side_agents_id.forEach(
                   buyAgents => {
-                    if (buyAgents === this.$props.id) {
+                    if (buyAgents === localStorage.getItem('id')) {
                       project.user_type = "Buy Side";
                       this.myProjects.push(project);
                     }
@@ -36,7 +36,7 @@ export default {
                 );
                 project.sell_side_agents_id.forEach(
                     sellAgents => {
-                      if (sellAgents === this.$props.id) {
+                      if (sellAgents === localStorage.getItem('id')) {
                         project.user_type = "Sell Side";
                         this.myProjects.push(project);
                       }
@@ -49,7 +49,8 @@ export default {
         });
   },
   methods: {
-    goingToProject(team) {
+    goingToProject(team, id) {
+      localStorage.setItem('project', id);
       this.userTeam_local = team;
       this.$emit('openProjectDashboard');
     },
@@ -142,14 +143,14 @@ md:justify-content-between">
         <pv-column :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <router-link
-                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
+                :to="`/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
             >
               <pv-button
                   icon="pi pi-chevron-right"
                   class="mr-2"
                   severity="success"
                   rounded
-                  @click="goingToProject(slotProps.data.user_type)"
+                  @click="goingToProject(slotProps.data.user_type, slotProps.data.id)"
               />
             </router-link>
 

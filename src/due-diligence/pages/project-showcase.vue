@@ -36,11 +36,11 @@ export default {
       documentsService: null,
       // Posts
       newDocuments: {
-        project_id: this.$props.project_id,
+        project_id: localStorage.getItem('project'),
         informationGroup_id: null
       },
       informationItem: {
-        project_id: this.$props.project_id,
+        project_id: localStorage.getItem('project'),
         identifier: '',
         name: '',
         parent: '',
@@ -54,37 +54,41 @@ export default {
     this.$emit('openProjectDashboard');
     this.informationGroupsService = new InformationGroupApiService();
     this.documentsService = new DocumentsApiService();
-    this.informationGroupsService.getByProject(this.$props.project_id)
-        .then((response) => {
-          this.informationGroups = response.data;
-          this.informationGroups.forEach(
-              informationGroup => {
-                if (informationGroup.parent === this.informationGroups_parent) {
-                  // include in showcase
-                  this.informationGroups_focused.push(informationGroup);
-                  this.informationGroups_id.push(informationGroup.identifier);
-                  // include its documents
-                  this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                      .then((response) => {
-                        informationGroup.children = response.data;
-                      });
-                  // see if it has children
-                  this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                      .then((response) => {
-                        if(response.data.length === 0) {
-                          informationGroup.has_children = false;
-                        }
-                        else {
-                          informationGroup.has_children = true;
-                        }
-                      });
-                }
-              }
-          );
-        });
+    this.getAllProjects(localStorage.getItem('project'));
     this.next_number = this.getNextNumber(1);
   },
   methods: {
+    // General GET
+    getAllProjects(projectId) {
+      this.informationGroupsService.getByProject(projectId)
+          .then((response) => {
+            this.informationGroups = response.data;
+            this.informationGroups.forEach(
+                informationGroup => {
+                  if (informationGroup.parent === this.informationGroups_parent) {
+                    // include in showcase
+                    this.informationGroups_focused.push(informationGroup);
+                    this.informationGroups_id.push(informationGroup.identifier);
+                    // include its documents
+                    this.documentsService.getByInformationItem(projectId, informationGroup.identifier)
+                        .then((response) => {
+                          informationGroup.children = response.data;
+                        });
+                    // see if it has children
+                    this.informationGroupsService.getChildren(projectId, informationGroup.identifier)
+                        .then((response) => {
+                          if(response.data.length === 0) {
+                            informationGroup.has_children = false;
+                          }
+                          else {
+                            informationGroup.has_children = true;
+                          }
+                        });
+                  }
+                }
+            );
+          });
+    },
     // Firebase
     upload: function() {
       // Normal Upload

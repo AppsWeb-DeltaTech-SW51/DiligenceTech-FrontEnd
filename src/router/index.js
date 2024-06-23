@@ -12,41 +12,41 @@ const router = createRouter({
             props: true,
         },
         {
-            path: '/:id',
+            path: '/',
             name: 'workspace',
             component: () => import('../views/workspace.view.vue'),
             props: true,
             children: [
                 {
-                    path: '/:id/workspace',
+                    path: '/workspace',
                     name: 'due_diligence',
                     component: () => import('../due-diligence/pages/my-projects.vue'),
                     props: true,
                 },
                 {
-                    path: '/:id/workspace/:project_id/:user_type',
+                    path: '/workspace/:project_id/:user_type',
                     name: 'due_diligence/project',
                     component: () => import('../due-diligence/pages/project-showcase.vue'),
                     props: true,
                 },
                 {
-                    path: '/:id/qa/:project_id/:user_type',
+                    path: '/qa/:project_id/:user_type',
                     name: 'qa',
                     component: () => import('../qa/pages/qa-showcase.vue'),
                     props: true,
                 },
                 {
-                    path: '/:id/project_creation',
+                    path: '/project_creation',
                     name: 'project_creation',
                     component: () => import('../pending-projects/pages/pending-projects.vue'),
                     props: true,
                 },
                 {
-                    path: '/:id/settings',
+                    path: '/settings',
                     name: 'settings',
                 },
                 {
-                    path: '/:id/settings/:project_id/:user_type',
+                    path: '/settings/:project_id/:user_type',
                     name: 'settings_project',
                 },
             ],

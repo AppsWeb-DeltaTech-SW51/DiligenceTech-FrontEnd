@@ -32,9 +32,13 @@ export default {
             console.log(this.password)
             if (response.data.length != 0) {
               this.user_local = response.data[0];
-              this.$router.push(`/${this.user_local.id}/workspace`);
+              this.setLocalId(response.data[0].id);
+              this.$router.push(`/workspace`);
             }
           });
+    },
+    setLocalId(value) {
+      localStorage.setItem('id', value);
     },
     createAgent() {
       if (this.signingUp.id.charAt(0) === 'u' && this.signingUp.id.length === 10) {
