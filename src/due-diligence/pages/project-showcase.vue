@@ -15,7 +15,7 @@ export default {
       user_local: this.user,
       userTeam_local: this.userTeam,
       insideProject_local: this.insideProject,
-      // Dialogs
+      // DIALOGS
       newInformationItemDialog: false,
       newDocumentsDialog: false,
       newAreaDialog: false,
@@ -30,11 +30,12 @@ export default {
       informationGroups_focused: [],
       informationGroups_id: [],
       selectedProjects: null,
+      // pv-table Facades
       expandedRows: null,
       // Services
       informationGroupsService: null,
       documentsService: null,
-      // Posts
+      // POST Helpers
       newDocuments: {
         project_id: localStorage.getItem('project'),
         informationGroup_id: null
@@ -51,25 +52,28 @@ export default {
     };
   },
   created() {
-    this.$emit('openProjectDashboard');
-    this.informationGroupsService = new InformationGroupApiService();
-    this.documentsService = new DocumentsApiService();
-    this.getAllProjects(localStorage.getItem('project'));
+    this.onInit();
+    this.refocusInformationGroups(localStorage.getItem('project'));
     this.next_number = this.getNextNumber(1);
   },
   methods: {
+    // onInit
+    onInit() {
+      this.$emit('openProjectDashboard');
+      this.informationGroupsService = new InformationGroupApiService();
+      this.documentsService = new DocumentsApiService();
+    },
     // General GET
-    getAllProjects(projectId) {
+    refocusInformationGroups(projectId) {
       this.informationGroupsService.getByProject(projectId)
           .then((response) => {
-            this.informationGroups = response.data;
-            this.informationGroups.forEach(
+            response.data.forEach(
                 informationGroup => {
                   if (informationGroup.parent === this.informationGroups_parent) {
                     // include in showcase
                     this.informationGroups_focused.push(informationGroup);
                     this.informationGroups_id.push(informationGroup.identifier);
-                    // include its documents
+                    // include documents
                     this.documentsService.getByInformationItem(projectId, informationGroup.identifier)
                         .then((response) => {
                           informationGroup.children = response.data;
@@ -86,8 +90,20 @@ export default {
                         });
                   }
                 }
-            );
+            )
           });
+    },
+    deleteFocusInformationGroups() {
+      while (this.informationGroups_focused.length !== 0) {
+        this.informationGroups_focused.pop();
+        this.informationGroups_id.pop();
+      }
+    },
+    askReturnToMyProjects() {
+      if (this.informationGroups_grandparents.length === 0 || this.informationGroups_parent === null) {
+        this.$router.push(`/workspace`);
+        this.insideProject_local = false;
+      }
     },
     // Firebase
     upload: function() {
@@ -100,7 +116,7 @@ export default {
                 .then((url) => {
                   // Create
                   this.documentsService.create({
-                    project_id: this.$props.project_id,
+                    project_id: localStorage.getItem('project'),
                     informationGroup_id: this.newDocuments.informationGroup_id,
                     file_name: this.$refs.myFile.files[0].name,
                     file_url: url,
@@ -109,26 +125,13 @@ export default {
                   this.informationGroups.forEach((informationGroup) => {
                     if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
                       informationGroup.children.push({
-                        project_id: this.$props.project_id,
+                        project_id: localStorage.getItem('project'),
                         informationGroup_id: this.newDocuments.informationGroup_id,
                         file_name: this.$refs.myFile.files[0].name,
                         file_url: url,
                       });
                     }
                   });
-                  /*
-                  // Update on the focused informationGroups
-                  this.informationGroups_focused.forEach((informationGroup) => {
-                    if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
-                      informationGroup.children.push({
-                        project_id: this.$props.project_id,
-                        informationGroup_id: this.newDocuments.informationGroup_id,
-                        file_name: this.$refs.myFile.files[0].name,
-                        file_url: url,
-                      });
-                    }
-                  });
-                  */
           });
           })
           .catch((error) => {
@@ -137,106 +140,29 @@ export default {
       // Close Dialog
       this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
     },
-    // Firebase Basic
-    uploadBasic: function() {
-      const storageRef = ref(storage, 'vue/' + this.$refs.myFileBasic.files[0].name);
-      uploadBytes(storageRef, this.$refs.myFileBasic.files[0])
-          .then((snapshot) => {
-            console.log('uploaded');
-          });
-    },
-    // Else
+    // Focus of Information Groups
     changeInformationGroup(group_id) {
       // delete focus' informationGroups
-      while (this.informationGroups_focused.length != 0) {
-        this.informationGroups_focused.pop();
-        this.informationGroups_id.pop();
-      }
+      this.deleteFocusInformationGroups();
       // change value of father
       this.informationGroups_grandparents.push(this.informationGroups_parent);
       this.informationGroups_parent = group_id;
       // add new focus' informationGroups
-      this.informationGroupsService.getByProject(this.$props.project_id)
-          .then((response) => {
-            this.informationGroups.forEach(
-                informationGroup => {
-                  if (informationGroup.parent === this.informationGroups_parent) {
-                    // include in showcase
-                    this.informationGroups_focused.push(informationGroup);
-                    this.informationGroups_id.push(informationGroup.identifier);
-                    // include documents
-                    this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          informationGroup.children = response.data;
-                        });
-                    // see if it has children
-                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          if(response.data.length === 0) {
-                            informationGroup.has_children = false;
-                          }
-                          else {
-                            informationGroup.has_children = true;
-                          }
-                        });
-                  }
-                }
-            );
-          });
+      this.refocusInformationGroups(localStorage.getItem('project'));
+
     },
     revertInformationGroup() {
-      if (this.informationGroups_grandparents.length === 0) {
-        this.$router.push(`/${this.user_local.id}/workspace`);
-        this.insideProject_local = false;
-      }
-      if (this.informationGroups_parent === null) {
-        this.$router.push(`/${this.user_local.id}/workspace`);
-        this.insideProject_local = false;
-      }
-      // delete focus' informationGroups
-      while (this.informationGroups_focused.length != 0) {
-        this.informationGroups_focused.pop();
-        this.informationGroups_id.pop();
-      }
+      this.askReturnToMyProjects();
+      this.deleteFocusInformationGroups();
       // change value of father
-      if (this.informationGroups_grandparents.length != 0) {
+      if (this.informationGroups_grandparents.length !== 0) {
         this.informationGroups_parent = this.informationGroups_grandparents[this.informationGroups_grandparents.length - 1];
         this.informationGroups_grandparents.pop();
       }
-      else {
-        this.$router.push(`/${this.user_local.id}/workspace`);
-        this.insideProject_local = false;
-      }
       // add new focus' informationGroups
-      this.informationGroupsService.getByProject(this.$props.project_id)
-          .then((response) => {
-            this.informationGroups.forEach(
-                informationGroup => {
-                  if (informationGroup.parent === this.informationGroups_parent) {
-                    // include in showcase
-                    this.informationGroups_focused.push(informationGroup);
-                    this.informationGroups_id.push(informationGroup.identifier);
-                    // show documents
-                    this.documentsService.getByInformationItem(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          informationGroup.children = response.data;
-                        });
-                    // see if it has children
-                    this.informationGroupsService.getChildren(this.$props.project_id, informationGroup.identifier)
-                        .then((response) => {
-                          if(response.data.length === 0) {
-                            informationGroup.has_children = false;
-                          }
-                          else {
-                            informationGroup.has_children = true;
-                          }
-                        });
-                  }
-                }
-            );
-          });
+      this.refocusInformationGroups(localStorage.getItem('project'));
     },
-    // Change Status Dialog
+    // DIALOGS
     openBuyStatusDialog(data) {
       this.statusDependency = data;
       this.changeBuyStatusDialog = true;
@@ -247,18 +173,16 @@ export default {
       this.changeSellStatusDialog = true;
       this.statusSwitcher = this.statusDependency.sell_status;
     },
-    // Documents Dialog
     openNewDocumentsDialog() {
       this.newDocumentsDialog = true;
     },
-    // Area Dialog
     openNewAreaDialog() {
       this.newAreaDialog = true;
     },
-    // Information Item Dialog
     openNewInformationItemDialog() {
       this.newInformationItemDialog = true;
     },
+    // Next Number
     getNextNumber(number) {
       this.informationGroupsService.getByProject(this.$props.project_id)
           .then((response) => {
@@ -279,32 +203,24 @@ export default {
           });
       return number;
     },
+    // POST Requests
+    areaRequest() {
+      return {
+        "project_id": localStorage.getItem('project'),
+        "identifier": this.informationItem.name,
+        "name": this.informationItem.name,
+        "parent": null,
+        "buy_status": null,
+        "sell_status": null
+      }
+    },
+    // POSTs
     createArea() {
-      // POST in db
-      this.informationGroupsService.create({
-        "project_id": this.$props.project_id,
-        "identifier": this.informationItem.name,
-        "name": this.informationItem.name,
-        "parent": null,
-        "buy_status": null,
-        "sell_status": null
-      });
-      this.informationGroups_focused.push({
-        "project_id": this.$props.project_id,
-        "identifier": this.informationItem.name,
-        "name": this.informationItem.name,
-        "parent": null,
-        "buy_status": null,
-        "sell_status": null
-      });
-      this.informationGroups.push({
-        "project_id": this.$props.project_id,
-        "identifier": this.informationItem.name,
-        "name": this.informationItem.name,
-        "parent": null,
-        "buy_status": null,
-        "sell_status": null
-      });
+      // POST in db (Create)
+      this.informationGroupsService.create(this.areaRequest());
+      // (Update)
+      this.informationGroups_focused.push(this.areaRequest());
+      this.informationGroups.push(this.areaRequest());
       // Delete content used for next creation
       this.informationItem.identifier = null;
       this.informationItem.parent = null;
@@ -364,12 +280,7 @@ export default {
       // Get out of Dialog
       this.newInformationItemDialog = false;
     },
-    htmlUserType(team) {
-      if (team === "buy_side")
-        return "Buy Side";
-      else
-        return "Sell Side";
-    },
+    // PUTs
     updateStatus(buy_side) {
       if (buy_side) {
         this.statusDependency.buy_status = this.statusSwitcher;
@@ -379,6 +290,13 @@ export default {
         this.statusDependency.sell_status = this.statusSwitcher;
         this.informationGroupsService.update(this.statusDependency.id, this.statusDependency);
       }
+    },
+    // HTML Helpers
+    htmlUserType(team) {
+      if (team === "buy_side")
+        return "Buy Side";
+      else
+        return "Sell Side";
     },
     getStatusSeverity(status) {
       switch (status) {

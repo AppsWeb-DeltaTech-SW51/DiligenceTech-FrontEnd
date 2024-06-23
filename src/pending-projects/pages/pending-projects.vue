@@ -240,8 +240,9 @@ export default {
           <pv-input-text id="name" v-model="project_name" placeholder="Project" type="text"/>
         </div>
         <div class="field">
-          <label for="team" class="mr-4">Buy-Side - Sell-Side:</label>
+          <label for="team" class="mr-4">Buy-Side</label>
           <pv-input-switch v-model="chosenTeam"></pv-input-switch>
+          <label for="team" class="ml-4">Sell-Side</label>
         </div>
         <div class="field">
           <label for="team" class="block">Opposing Agent Code (U + 9 numbers):</label>

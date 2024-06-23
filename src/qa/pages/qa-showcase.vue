@@ -39,11 +39,11 @@ export default {
       answersService: null,
       // Posts
       newDocuments: {
-        project_id: this.$props.project_id,
+        project_id: localStorage.getItem('project'),
         informationGroup_id: null
       },
       informationItem: {
-        project_id: this.$props.project_id,
+        project_id: localStorage.getItem('project'),
         identifier: '',
         name: '',
         parent: '',
@@ -59,12 +59,12 @@ export default {
     this.documentsService = new DocumentsApiService();
     this.questionsService = new QuestionsApiService();
     this.answersService = new AnswersApiService();
-    this.questionsService.getByProject(this.$props.project_id)
+    this.questionsService.getByProject(localStorage.getItem('project'))
         .then((response) => {
           this.questions = response.data;
           this.questions.forEach((questionPossible) => {
             questionPossible.answer = [];
-            this.answersService.getByQuestionItem(this.$props.project_id, questionPossible.informationGroup_id)
+            this.answersService.getByQuestionItem(localStorage.getItem('project'), questionPossible.informationGroup_id)
                 .then((response2) => {
                   console.log(response2.data);
                   questionPossible.answer = response2.data;
@@ -72,7 +72,7 @@ export default {
           });
           console.log(this.questions);
         });
-    this.informationGroupsService.getByProject(this.$props.project_id)
+    this.informationGroupsService.getByProject(localStorage.getItem('project'))
         .then((response) => {
           this.informationGroups = response.data;
         });
@@ -212,7 +212,7 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         <template #header>
           <div class="table-header flex flex-column md:flex-row
 md:justify-content-between">
-            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{this.$props.project_id}}</h5>
+            <h5 class="mb-2 md:m-0 p-as-md-center text-x1"></h5>
             <pv-button
                 icon="pi pi-chevron-left"
                 class="mr-2"

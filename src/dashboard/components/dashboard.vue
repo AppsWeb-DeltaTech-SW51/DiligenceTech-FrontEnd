@@ -16,8 +16,8 @@ export default {
         { label: "Pending Projects", to: `/project_creation`, icon: 'pi-clock' },
       ],
       project_items: [
-        { label: "Due Diligence", to: `/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-search' },
-        { label: "Q&A", to: `/qa/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-comments'},
+        { label: "Due Diligence", to: `/workspace/${localStorage.getItem('project')}/${this.$route.params.user_type}`, icon: 'pi-search' },
+        { label: "Q&A", to: `/qa/${localStorage.getItem('project')}/${this.$route.params.user_type}`, icon: 'pi-comments'},
       ],
     };
   },
