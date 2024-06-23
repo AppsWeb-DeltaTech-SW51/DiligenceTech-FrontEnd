@@ -213,17 +213,17 @@ export default {
   },
 };
 </script>
-
 <template>
   <div>
-    <div class="card">
-      <pv-toolbar class="mb-4 border-2">
+    <div class="card bg-white shadow-md rounded-lg overflow-hidden">
+      <pv-toolbar class="mb-4 border-b-2 border-gray-200">
         <template #start>
-          <h3>My Pending Projects</h3>
+          <h3 class="text-2xl font-bold text-white">My Pending Projects</h3>
         </template>
         <template #end>
         </template>
       </pv-toolbar>
+
       <pv-dialog
           header="New Project"
           v-model:visible="newProjectDialog"
@@ -231,26 +231,27 @@ export default {
           :style="{ width: '30vw' }"
           :modal="true"
       >
-        <div class="field">
-          <label for="code" class="block">Code (PJ + 4 numbers):</label>
-          <pv-input-text id="code" v-model="code" placeholder="PJ" type="text"/>
+        <div class="field mb-4">
+          <label for="code" class="block text-sm font-medium text-gray-700">Code (PJ + 4 numbers):</label>
+          <pv-input-text id="code" v-model="code" placeholder="PJ" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
         </div>
-        <div class="field">
-          <label for="name" class="block">Project Name:</label>
-          <pv-input-text id="name" v-model="project_name" placeholder="Project" type="text"/>
+        <div class="field mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700">Project Name:</label>
+          <pv-input-text id="name" v-model="project_name" placeholder="Project" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
         </div>
-        <div class="field">
-          <label for="team" class="mr-4">Buy-Side - Sell-Side:</label>
-          <pv-input-switch v-model="chosenTeam"></pv-input-switch>
+        <div class="field mb-4">
+          <label for="team" class="block text-sm font-medium text-gray-700">Buy-Side - Sell-Side:</label>
+          <pv-input-switch v-model="chosenTeam" class="mt-1"/>
         </div>
-        <div class="field">
-          <label for="team" class="block">Opposing Agent Code (U + 9 numbers):</label>
-          <pv-input-text v-model="opponent" id="opponent" placeholder="U" type="text"/>
+        <div class="field mb-4">
+          <label for="opponent" class="block text-sm font-medium text-gray-700">Opposing Agent Code (U + 9 numbers):</label>
+          <pv-input-text v-model="opponent" id="opponent" placeholder="U" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
         </div>
         <template #footer>
-          <pv-button label="Create Pending Project" class="p-button-outlined" @click="newProject"></pv-button>
+          <pv-button label="Create Pending Project" class="p-button-outlined w-full" @click="newProject"></pv-button>
         </template>
       </pv-dialog>
+
       <pv-toolbar class="mb-4 bg-gray-900">
         <template #start>
           <pv-button
@@ -259,11 +260,7 @@ export default {
               @click="openNewProjectDialog"
           />
         </template>
-        <template #end>
-        </template>
       </pv-toolbar>
-
-
 
       <pv-data-table
           ref="dt"
@@ -272,18 +269,16 @@ export default {
           dataKey="id"
           :paginator="true"
           :rows="10"
-          paginatorTemplate="FirstPage Link PrevPageLink PageLinks
-NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rows-per-page-options="[5,10,25]"
-          current-page-report-template="Showing {first} to {last} of
-{totalRecords} projects"
+          current-page-report-template="Showing {first} to {last} of {totalRecords} projects"
           responsive-layout="scroll"
           show-gridlines
+          class="bg-white shadow-md rounded-lg overflow-hidden"
       >
         <template #header>
-          <div class="table-header flex flex-column md:flex-row
-md:justify-content-between">
-            <h5 class="mb-2 md:m-0 p-as-md-center text-x1">My Pending Projects</h5>
+          <div class="table-header flex justify-between items-center">
+            <h5 class="text-lg font-semibold text-gray-700">My Pending Projects</h5>
           </div>
         </template>
         <pv-column
@@ -291,24 +286,28 @@ md:justify-content-between">
             header="Id"
             :sortable="true"
             style="min-width: 6rem"
+            class="text-gray-600"
         ></pv-column>
         <pv-column
             field="name"
             header="Name"
             :sortable="true"
             style="min-width: 10rem"
+            class="text-gray-600"
         ></pv-column>
         <pv-column
             field="date_published"
             header="Date Published"
             :sortable="true"
             style="min-width: 8rem"
+            class="text-gray-600"
         ></pv-column>
         <pv-column
             field="team"
             header="My Team"
             :sortable="true"
             style="min-width: 8rem"
+            class="text-gray-600"
         ></pv-column>
         <pv-column header="Confirm" :exportable="false" style="min-width: 12rem">
           <template #body="slotProps">
@@ -344,5 +343,46 @@ md:justify-content-between">
 </template>
 
 <style scoped>
+.field {
+  margin-bottom: 1.5rem;
+}
 
+.text-lg {
+  font-size: 1.25rem;
+}
+
+.text-gray-600 {
+  color: #4a5568;
+}
+
+.bg-gray-900 {
+  background-color: #2d3748; /* Dark gray background for the toolbar */
+}
+
+.p-button-warning {
+  background-color: #e2c411; /* Adjusted background color for the "New Project" button */
+  color: #1a202c; /* Adjusted text color */
+}
+
+.p-button-outlined {
+  border-color: #3182ce;
+  color: #3182ce;
+}
+
+.p-button-outlined:hover {
+  background-color: #3182ce;
+  color: white;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.rounded-lg {
+  border-radius: 0.75rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
 </style>
