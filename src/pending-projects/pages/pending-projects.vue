@@ -41,7 +41,7 @@ export default {
                 this.invitationsService.getByProject(pending_project.id)
                     .then((response2) => {
                       response2.data.forEach(invitation => {
-                        if (invitation.user_id === this.$props.id) {
+                        if (invitation.user_id === localStorage.getItem('id')) {
                           console.log('1');
                           this.projects.push(pending_project);
                           this.projects[this.projects.length - 1].team = this.team_html(invitation.team);
@@ -91,7 +91,7 @@ export default {
       // POST invitations
       //// self invitation
       this.invitationsService.create({
-        user_id: this.$props.user.id,
+        user_id: localStorage.getItem('id'),
         project_id: this.code,
         "team": this.chosenTeam ? 'sell_side' : 'buy_side',
         "confirmation": true,
@@ -240,8 +240,9 @@ export default {
           <pv-input-text id="name" v-model="project_name" placeholder="Project" type="text"/>
         </div>
         <div class="field">
-          <label for="team" class="mr-4">Buy-Side - Sell-Side:</label>
+          <label for="team" class="mr-4">Buy-Side</label>
           <pv-input-switch v-model="chosenTeam"></pv-input-switch>
+          <label for="team" class="ml-4">Sell-Side</label>
         </div>
         <div class="field">
           <label for="team" class="block">Opposing Agent Code (U + 9 numbers):</label>

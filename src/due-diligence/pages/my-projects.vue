@@ -3,53 +3,58 @@ import {DueDiligenceProjectsApiService} from "../services/due-diligence-projects
 
 export default {
   name: "my-projects",
-  props: ['id','user','userTeam'],
+  props: ['user','userTeam'],
   data() {
     return {
       // Props
       user_local: this.user,
       userTeam_local: this.userTeam,
-      // Else
-      projects: [],
+      // GETs
       myProjects: [],
-      project: {},
-      selectedProjects: null,
+      // Services
       projectsService: null,
     };
   },
   created() {
-    this.$emit('openGeneralDashboard');
-    this.userTeam_local = null;
-    this.projectsService = new DueDiligenceProjectsApiService();
-    this.projectsService.getAll()
-        .then((response) => {
-          this.projects = response.data;
-          this.projects.forEach(
-              project => {
-                project.buy_side_agents_id.forEach(
-                  buyAgents => {
-                    if (buyAgents === this.$props.id) {
-                      project.user_type = "Buy Side";
-                      this.myProjects.push(project);
-                    }
-                  }
-                );
-                project.sell_side_agents_id.forEach(
-                    sellAgents => {
-                      if (sellAgents === this.$props.id) {
-                        project.user_type = "Sell Side";
-                        this.myProjects.push(project);
-                      }
-                    }
-                );
-                console.log(project.buy_side_agents_id);
-                console.log(project.sell_side_agents_id);
-              }
-          );
-        });
+    // initializing
+    this.onInit();
+    this.getUserProjects();
   },
   methods: {
-    goingToProject(team) {
+    onInit() {
+      this.$emit('openGeneralDashboard');
+      this.userTeam_local = null;
+      this.projectsService = new DueDiligenceProjectsApiService();
+    },
+    getUserProjects() {
+      this.projectsService.getAll()
+          .then((response) => {
+            response.data.forEach(
+                project => {
+                  project.buy_side_agents_id.forEach(
+                      buyAgents => {
+                        if (buyAgents === localStorage.getItem('id')) {
+                          project.user_type = "Buy Side";
+                          this.myProjects.push(project);
+                        }
+                      }
+                  );
+                  project.sell_side_agents_id.forEach(
+                      sellAgents => {
+                        if (sellAgents === localStorage.getItem('id')) {
+                          project.user_type = "Sell Side";
+                          this.myProjects.push(project);
+                        }
+                      }
+                  );
+                  console.log(project.buy_side_agents_id);
+                  console.log(project.sell_side_agents_id);
+                }
+            );
+          });
+    },
+    onToProject(team, id) {
+      localStorage.setItem('project', id);
       this.userTeam_local = team;
       this.$emit('openProjectDashboard');
     },
@@ -95,7 +100,6 @@ export default {
 
           ref="dt"
           :value="myProjects"
-          v-model:selection="selectedProjects"
           dataKey="id"
           :paginator="true"
           :rows="10"
@@ -146,7 +150,7 @@ md:justify-content-between">
         <pv-column :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <router-link
-                :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
+                :to="`/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
             >
               <pv-button
                   style="background-color:#131920"
@@ -154,7 +158,7 @@ md:justify-content-between">
                   class="mr-2"
                   severity="success"
                   rounded
-                  @click="goingToProject(slotProps.data.user_type)"
+                  @click="onToProject(slotProps.data.user_type, slotProps.data.id)"
               />
             </router-link>
 
