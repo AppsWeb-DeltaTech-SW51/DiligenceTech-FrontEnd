@@ -12,12 +12,12 @@ export default {
       language_switch: true,
       // Else
       items: [
-        { label: "Projects", to: `/${this.$route.params.id}/workspace` },
-        { label: "Pending Projects", to: `/${this.$route.params.id}/project_creation` },
+        { label: "Projects", to: `/${this.$route.params.id}/workspace`, icon: 'pi-folder' },
+        { label: "Pending Projects", to: `/${this.$route.params.id}/project_creation`, icon: 'pi-clock' },
       ],
       project_items: [
-        { label: "Due Diligence", to: `/${this.$route.params.id}/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}` },
-        { label: "Q&A", to: `/${this.$route.params.id}/qa/${this.$route.params.project_id}/${this.$route.params.user_type}` },
+        { label: "Due Diligence", to: `/${this.$route.params.id}/workspace/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-search' },
+        { label: "Q&A", to: `/${this.$route.params.id}/qa/${this.$route.params.project_id}/${this.$route.params.user_type}`, icon: 'pi-comments'},
       ],
     };
   },
@@ -30,33 +30,40 @@ export default {
 </script>
 
 <template>
-  <div
-      v-if="!insideProject2"
-      class="col-2 border-3 w-48 bg-gray-900 text-white pt-4"
-  >
-    <router-link v-for="item in items" :key="item.label" :to="item.to"
-                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-      <span class="text-white text">{{ item.label }}</span>
-    </router-link>
-    <span @click="openSettingsDialog" class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors text-white text" style="cursor: pointer;">Settings</span>
-    <router-link :key="Log-Out" to="/login"
-                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-      <span class="text-white text">Log-Out</span>
-    </router-link>
-  </div>
-  <div
-      v-else
-      class="col-2 border-3 w-48 bg-gray-900 text-white pt-4"
-  >
-    <router-link v-for="item in project_items" :key="item.label" :to="item.to"
-                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-      <span class="text-white text">{{ item.label }}</span>
-    </router-link>
-    <span @click="openSettingsDialog" class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors text-white text" style="cursor: pointer;">Settings</span>
-    <router-link :key="Log-Out" to="/login"
-                 class="block px-4 py-2 rounded hover:bg-blue-700 transition-colors">
-      <span class="text-white text">Log-Out</span>
-    </router-link>
+  <div class="p-component col-3 text-white" style="min-height: 100vh; background-color: #1b232d">
+    <div>
+      <!-- Header -->
+      <div class="flex align-items-center mb-2">
+        <img width="70" class="p-image-toolbar" src="../../assets/images/DiligenceTechImage.png">
+        <h1 style="font-size: 1.5rem">DiligenceTech</h1>
+        <i class="pi pi-bars ml-5" style="font-size: 1.5rem; "></i>
+      </div>
+      <!-- V-for Buttons -->
+      <router-link v-if="!insideProject2" v-for="item in items" :key="item.label" :to="item.to"
+                   class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors flex align-items-center"
+                   style="text-decoration: none; color: white">
+        <i :class="`pi ${item.icon} mr-2`" style="font-size: 1.5rem; "></i>
+        <p class="text-white text">{{ item.label }}</p>
+      </router-link>
+      <router-link v-else v-for="item in project_items" :key="item.label" :to="item.to"
+                   class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors flex align-items-center"
+                   style="text-decoration: none; color: white">
+        <i :class="`pi ${item.icon} mr-2`" style="font-size: 1.5rem"></i>
+        <p class="text-white text">{{ item.label }}</p>
+      </router-link>
+      <!-- General Buttons -->
+      <div @click="openSettingsDialog"
+                  class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors flex align-items-center" style="cursor: pointer;">
+        <i class="pi pi-cog mr-2" style="font-size: 1.5rem"></i>
+        <p class="text-white text">Settings</p>
+      </div>
+      <router-link :key="Log-Out" to="/login"
+                   class="block px-3 py-2 rounded hover:bg-blue-700 transition-colors flex align-items-center"
+                   style="text-decoration: none; color: white">
+        <i class="pi pi-sign-out mr-2" style="font-size: 1.5rem"></i>
+        <p class="text-white text">Log-Out</p>
+      </router-link>
+    </div>
   </div>
   <pv-dialog
       header="Settings"
@@ -88,6 +95,6 @@ export default {
   </pv-dialog>
 </template>
 
-<style scoped>
+<style>
 
 </style>

@@ -308,7 +308,7 @@
       "identifier": "1",
       "name": "Balance de comprobación (en Excel) abierto al máximo nivel de dígitos (años 2015 al 2017)",
       "parent": "Financiero",
-      "buy_status": "Done",
+      "buy_status": "In Progress",
       "sell_status": "Done",
       "children": [
         {

@@ -102,37 +102,25 @@ export default {
 </script>
 
 <template>
-  <pv-toast />
-  <header>
-    <pv-toolbar class="bg-gray-900">
-      <template #start>
-        <img width="70" class="p-image-toolbar" src="../assets/images/DiligenceTechImage.png">
-        <h3 class="text-white">DiligenceTech</h3>
-      </template>
-      <template #end>
-        <h3 class="text-white mr-2">Welcome: {{this.username}}</h3>
-        <pv-avatar :image="this.image" style="width: 32px; height: 32px" />
-      </template>
-    </pv-toolbar>
-  </header>
   <div class="flex">
     <dashboard
-        class="border-3"
-        style="min-height: 400px;"
         :insideProject2="this.insideProject"
         :project_id="projectId"
         :user_team="userTeam_local"
     ></dashboard>
-    <RouterView
-        class="col-10"
-        :user="user_local"
-        :userTeam="userTeam_local"
-        :insideProject="projectId"
-        @openProjectDashboard="openProjectDashboard"
-        @openGeneralDashboard="openGeneralDashboard"
-    />
+    <div class="col-9" style="background-color: #131920">
+      <div class="p-4 mb-2 h-4rem p-component text-white flex align-items-center justify-content-end" style="background-color: #1b232d">
+        <pv-avatar :image="this.image" style="width: 32px; height: 32px" />
+      </div>
+      <RouterView
+          :user="user_local"
+          :userTeam="userTeam_local"
+          :insideProject="projectId"
+          @openProjectDashboard="openProjectDashboard"
+          @openGeneralDashboard="openGeneralDashboard"
+      />
+    </div>
   </div>
-
 </template>
 
 <style scoped>
