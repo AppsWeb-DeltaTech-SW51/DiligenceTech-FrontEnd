@@ -398,15 +398,15 @@ export default {
 <template>
   <div>
     <div class="card">
-      <pv-toolbar class="mb-4 border-2">
+      <pv-toolbar style="background-color:#131920" class="mb-4 border-2">
         <template #start>
-          <h3>Project</h3>
+          <h3 class="text-white">Project</h3>
         </template>
         <template #end>
-          <h3>{{htmlUserType(this.$props.user_type)}}</h3>
+          <h3 class="text-white">{{htmlUserType(this.$props.user_type)}}</h3>
         </template>
       </pv-toolbar>
-      <pv-toolbar class="mb-4 bg-gray-900">
+      <pv-toolbar style="background-color:#131920" class="mb-4 ">
         <template #start>
           <pv-dialog
               header="New Information Item"
@@ -428,6 +428,7 @@ export default {
             </template>
           </pv-dialog>
           <pv-dialog
+
               header="New Area"
               v-model:visible="newAreaDialog"
               :breakpoints="{ '960px': '75vw' }"
@@ -447,6 +448,7 @@ export default {
             </template>
           </pv-dialog>
           <pv-button
+              style="background-color:#1b232d"
               v-if="this.$props.user_type === 'buy_side' && this.informationGroups_grandparents.length !== 1"
               label="New Area"
               icon="pi pi-plus"
@@ -454,6 +456,7 @@ export default {
               @click="openNewAreaDialog"
           />
           <pv-button
+              style="background-color:#1b232d"
               v-else-if="this.$props.user_type === 'buy_side'"
               label="New Information Item"
               icon="pi pi-plus"
@@ -461,6 +464,7 @@ export default {
               @click="openNewInformationItemDialog"
           />
           <pv-button
+              style="background-color:#1b232d"
               v-else
               label="Add Document"
               icon="pi pi-plus"
@@ -505,12 +509,14 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
 {totalRecords} projects"
           responsive-layout="scroll"
           show-gridlines
+          :style="{ backgroundColor: '#2B323B', color: 'white', borderColor: 'white' }"
       >
         <template #header>
           <div class="table-header flex flex-column md:flex-row
 md:justify-content-between">
             <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{this.$props.project_id}}</h5>
             <pv-button
+                style="background-color:#131920"
                 icon="pi pi-chevron-left"
                 class="mr-2"
                 severity="warning"
@@ -559,6 +565,7 @@ md:justify-content-between">
               </template>
             </pv-dialog>
             <pv-button
+                style="background-color:#131920"
                 label="Change Status"
                 v-if="informationGroups_grandparents.length === 1 && this.$route.params.user_type === 'sell_side'"
                 class="mr-2 p-button-outlined"
@@ -567,10 +574,11 @@ md:justify-content-between">
                 @click="openSellStatusDialog(slotProps.data)"
             />
             <pv-button
+                style="background-color:#131920"
                 icon="pi pi-chevron-right"
                 label="Change Status"
                 v-else-if="informationGroups_grandparents.length === 1"
-                class="mr-2 p-button-outlined"
+                class="mr-2 p-button-outlined; text-white"
                 severity="info"
                 rounded
                 @click="openBuyStatusDialog(slotProps.data)"
@@ -606,6 +614,7 @@ md:justify-content-between">
         <pv-column v-else :exportable="false" style="min-width: 3rem">
           <template #body="slotProps">
             <pv-button
+                style="background-color:#131920"
                 icon="pi pi-chevron-right"
                 label="Go"
                 v-if="informationGroups_grandparents.length !== 1"

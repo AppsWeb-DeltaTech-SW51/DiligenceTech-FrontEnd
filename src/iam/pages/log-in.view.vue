@@ -49,17 +49,17 @@ export default {
 </script>
 
 <template>
-  <div class="flex">
-    <div class="col-6 h-screen flex align-items-center justify-content-center">
+  <div style="background-color:#111a1f" class="flex">
+    <div style="background-color: #1b232d " class="p-4 col-6 h-screen flex align-items-center justify-content-center">
       <div class="p-fluid">
-        <h1 class="mb-4">Log-In</h1>
+        <h1 style="font-size:2rem " class="text-white p-component mb-4">Log-In</h1>
         <div class="field">
-          <label for="email">Email</label>
-          <pv-input-text v-model="email" id="email" type="text" />
+          <label style="font-size:1rem " class="text-white p-component " for="email">Email</label>
+          <pv-input-text  class="text-white " style="background-color: #19232c;border-color:gray; border-radius: 20px" v-model="email" id="email" type="text" />
         </div>
         <div class="field">
-          <label for="password">Password</label>
-          <pv-input-text v-model="password" id="password" type="password" />
+          <label style="font-size:1rem " class="text-white p-component " for="password">Password</label>
+          <pv-input-text  class="text-white " style="background-color: #19232c; border-radius: 20px; border-color:gray "  v-model="password" id="password" type="password" />
         </div>
 
         <pv-button label="Login" class="mt-2" @click="confirmAgent"></pv-button>
@@ -67,22 +67,22 @@ export default {
     </div>
     <div class="col-6 h-screen flex align-items-center justify-content-center bg-gray-900 text-white">
       <div class="p-fluid">
-        <h1 class="mb-4">Sign-Up</h1>
+        <h1 style="font-size:2rem " class="text-white p-component mb-4">Sign-Up</h1>
         <div class="field">
-          <label for="signup-code">Code (u + 9 numbers)</label>
-          <pv-input-text v-model="signingUp.id" id="signup-code" type="text" />
+          <label style="font-size:1rem " class="text-white p-component " for="signup-code">Code (u + 9 numbers)</label>
+          <pv-input-text class="text-white " style="background-color: #212121; border-radius: 20px; border-color:gray " v-model="signingUp.id" id="signup-code" type="text" />
         </div>
         <div class="field">
-          <label for="signup-email">Email</label>
-          <pv-input-text v-model="signingUp.email" id="signup-email" type="text" />
+          <label style="font-size:1rem " class="text-white p-component " for="signup-email">Email</label>
+          <pv-input-text class="text-white " style="background-color: #212121; border-radius: 20px; border-color:gray " v-model="signingUp.email" id="signup-email" type="text" />
         </div>
         <div class="field">
-          <label for="signup-username">Username</label>
-          <pv-input-text v-model="signingUp.username" id="signup-username" type="text" />
+          <label style="font-size:1rem " class="text-white p-component " for="signup-username">Username</label>
+          <pv-input-text class="text-white " style="background-color: #212121; border-radius: 20px; border-color:gray " v-model="signingUp.username" id="signup-username" type="text" />
         </div>
         <div class="field">
-          <label for="signup-password">Password</label>
-          <pv-input-text v-model="signingUp.password" id="signup-password" type="password" />
+          <label style="font-size:1rem " class="text-white p-component " for="signup-password">Password</label>
+          <pv-input-text class="text-white " style="background-color: #212121; border-radius: 20px; border-color:gray " v-model="signingUp.password" id="signup-password" type="password" />
         </div>
 
         <pv-button label="Login" class="mt-2" @click="createAgent"></pv-button>

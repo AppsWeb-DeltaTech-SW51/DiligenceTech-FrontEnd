@@ -64,20 +64,23 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div class="card">
-      <pv-toolbar class="mb-4 border-2">
+  <div >
+    <div
+        class="card">
+      <pv-toolbar style="background-color:#131920" class="mb-4 border-2">
         <template #start>
-          <h3>Projects</h3>
+          <h3 class="text-white" >Projects</h3>
         </template>
         <template #end>
         </template>
       </pv-toolbar>
-      <pv-toolbar class="mb-4 bg-gray-900">
+      <pv-toolbar style="background-color:#131920" class="mb-4">
         <template #start>
           <pv-button
+
               label=""
-              class="p-button-warning mr-2"
+
+              class="p-button-warning mr-2; text-white"
               @click=""
               :disabled="true"
           />
@@ -89,6 +92,7 @@ export default {
 
 
       <pv-data-table
+
           ref="dt"
           :value="myProjects"
           v-model:selection="selectedProjects"
@@ -145,6 +149,7 @@ md:justify-content-between">
                 :to="`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`"
             >
               <pv-button
+                  style="background-color:#131920"
                   icon="pi pi-chevron-right"
                   class="mr-2"
                   severity="success"
