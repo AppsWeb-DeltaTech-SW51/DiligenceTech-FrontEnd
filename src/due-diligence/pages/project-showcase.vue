@@ -2,15 +2,20 @@
 import {InformationGroupApiService} from "../services/informationGroup-api.service.js";
 import {DocumentsApiService} from "../services/documents-api.service.js";
 import { storage } from "../../firebase.js";
-import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
+import {ref, uploadBytes, getDownloadURL, getStorage, deleteObject} from "firebase/storage";
+import {uploadFile} from "../functions/upload.js";
+import {useToast} from "primevue/usetoast";
 
 export default {
   name: "project-showcase",
   props: ['id','user', 'project_id','userTeam','user_type','insideProject'],
   data() {
     return {
+      // Toast
+      toast: useToast(),
       // Firebase
       myFile: null,
+      myFiles: [],
       // Props
       user_local: this.user,
       userTeam_local: this.userTeam,
@@ -81,7 +86,7 @@ export default {
                     // see if it has children
                     this.informationGroupsService.getChildren(projectId, informationGroup.identifier)
                         .then((response) => {
-                          if(response.data.length === 0) {
+                          if (response.data.length === 0) {
                             informationGroup.has_children = false;
                           }
                           else {
@@ -105,6 +110,62 @@ export default {
         this.insideProject_local = false;
       }
     },
+    async upload() {
+      this.toast.add({ severity: 'warn', summary: 'Files being created', detail: 'Please wait till we complete your request', life: 3000 });
+      // Find informationGroup_id
+      this.informationGroups_focused.forEach((informationGroup) => {
+        if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+          this.newDocuments.informationGroup_id = informationGroup.id;
+        }
+      });
+      // upload()
+      let files = this.$refs.myFiles.files;
+      console.log(this.$refs.myFiles.files.length);
+      const uploadedFiles = [];
+      for (let file of files) {
+        try {
+          const downloadURL = await uploadFile(file, localStorage.getItem('project'), this.newDocuments.informationGroup_id);
+          uploadedFiles.push({ file, downloadURL });
+          console.log('File available at', downloadURL);
+        } catch (error) {
+          console.error('Upload failed:', error);
+        }
+      }
+      // Handle the uploaded files (e.g., update state or notify user)
+      uploadedFiles.forEach((uploadedFile) => {
+        // Create
+        this.documentsService.create({
+          project_id: localStorage.getItem('project'),
+          informationGroup_id: this.newDocuments.informationGroup_id,
+          file_name: uploadedFile.file.name,
+          file_url: uploadedFile.downloadURL,
+        });
+        // Update on InformationGroups_focused in here
+        this.informationGroups_focused.forEach((informationGroup) => {
+          if (informationGroup.id === this.newDocuments.informationGroup_id) {
+            informationGroup.children.push({
+              project_id: localStorage.getItem('project'),
+              informationGroup_id: this.newDocuments.informationGroup_id,
+              file_name: uploadedFile.file.name,
+              file_url: uploadedFile.downloadURL,
+            });
+          }
+        });
+        // Update on InformationGroups in here
+        this.informationGroups.forEach((informationGroup) => {
+          if (informationGroup.id === this.newDocuments.informationGroup_id) {
+            informationGroup.children.push({
+              project_id: localStorage.getItem('project'),
+              informationGroup_id: this.newDocuments.informationGroup_id,
+              file_name: uploadedFile.file.name,
+              file_url: uploadedFile.downloadURL,
+            });
+          }
+        });
+      });
+      this.toast.add({ severity: 'success', summary: 'Files created', detail: 'The requested files have been added', life: 3000 });
+    },
+    /*
     // Firebase
     upload: function() {
       // Find id to use through informationGroups
@@ -146,6 +207,7 @@ export default {
       // Close Dialog
       this.$router.push(`/${this.$route.params.id}/workspace/${slotProps.data.id}/${viewUserType(slotProps.data.user_type)}`);
     },
+     */
     // Focus of Information Groups
     changeInformationGroup(group_id) {
       // delete focus' informationGroups
@@ -233,6 +295,7 @@ export default {
       this.informationItem.name = '';
       // Get out of Dialog
       this.newInformationItemDialog = false;
+      this.toast.add({ severity: 'success', summary: 'Area created', detail: 'The desired area has been added', life: 3000 });
     },
     createInformationItem() {
       // transform into possible information group
@@ -283,8 +346,51 @@ export default {
       this.informationItem.identifier = null;
       this.informationItem.parent = null;
       this.informationItem.name = '';
+      // Toast
+      this.toast.add({ severity: 'success', summary: 'Folder created', detail: 'The desired folder has been added', life: 3000 });
       // Get out of Dialog
       this.newInformationItemDialog = false;
+    },
+    // DELETEs
+    deleteDocument(docId, folderId, filename) {
+      // delete on firebase
+      const storage = getStorage();
+      // Get the document from the documents service
+      this.documentsService.getById(docId)
+          .then((response) => {
+            // Create a reference to the file to be deleted
+            const storageRef = ref(storage, 'uploads/' + `${localStorage.getItem('project')}/` + `${folderId}/` + filename);
+            // Delete the file
+            deleteObject(storageRef)
+                .then(() => {
+                  console.log('File deleted successfully');
+                })
+                .catch((error) => {
+                  console.error('Error deleting file:', error);
+                });
+          })
+          .catch((error) => {
+            console.error('Error getting document:', error);
+          });
+      // delete on back-end
+      this.documentsService.delete(docId);
+      // delete on informationGroups_focused
+      this.informationGroups_focused.forEach((informationGroup) => {
+        informationGroup.children.forEach((document) => {
+          if (document.id === docId) {
+            informationGroup.children.splice(informationGroup.children.indexOf(document), 1);
+          }
+        });
+      });
+      // delete on informationGroups
+      this.informationGroups.forEach((informationGroup) => {
+        informationGroup.children.forEach((document) => {
+          if (document.id === docId) {
+            informationGroup.children.splice(informationGroup.children.indexOf(document), 1);
+          }
+        });
+      });
+      this.toast.add({ severity: 'error', summary: 'File has been removed', detail: 'The requested file to delete has been removed', life: 3000 });
     },
     // PUTs
     updateStatus(buy_side) {
@@ -296,6 +402,7 @@ export default {
         this.statusDependency.sell_status = this.statusSwitcher;
         this.informationGroupsService.update(this.statusDependency.id, this.statusDependency);
       }
+      this.toast.add({ severity: 'success', summary: 'Status changed', detail: 'The wanted status has been changed', life: 3000 });
     },
     // HTML Helpers
     htmlUserType(team) {
@@ -324,6 +431,7 @@ export default {
 </script>
 
 <template>
+  <pv-toast />
   <div>
     <div class="card">
       <pv-toolbar class="mb-4 border-2">
@@ -394,7 +502,7 @@ export default {
               icon="pi pi-plus"
               class="p-button-info mr-2"
               @click="openNewDocumentsDialog"
-              :disabled="this.informationGroups_grandparents.length !== 1"
+              :disabled="this.informationGroups_grandparents.length !== 1 || informationGroups_focused.length === 0"
           />
           <pv-dialog
               header="Add Documents"
@@ -408,7 +516,13 @@ export default {
               <pv-dropdown id="owner" v-model="newDocuments.informationGroup_id" :options="informationGroups_id"></pv-dropdown>
             </div>
             <div class="field">
-              <pv-file-upload ref="myFile" custom-upload @uploader="upload" accept=".csv,.xls,.xlsx,.pdf"></pv-file-upload>
+              <pv-file-upload
+                  ref="myFiles"
+                  custom-upload
+                  @uploader="upload"
+                  :multiple="true"
+                  accept=".csv,.xls,.xlsx,.pdf, .png"
+              ></pv-file-upload>
             </div>
           </pv-dialog>
         </template>
@@ -447,6 +561,14 @@ md:justify-content-between">
             />
           </div>
         </template>
+        <div v-if="informationGroups_focused.length === 0">
+          <pv-column
+              field="identifier"
+              header="Oh no! There appears to be no information items here just yet, it's time to create one or wait for a Buy-agent to do so!"
+              style="min-width: 4rem"
+          ></pv-column>
+        </div>
+        <div v-else>
         <pv-column
             field="identifier"
             header="Id"
@@ -544,6 +666,7 @@ md:justify-content-between">
             />
           </template>
         </pv-column>
+        </div>
         <template #expansion="slotProps">
           <div
               v-if="slotProps.data.children.length !== 0"
@@ -576,6 +699,21 @@ md:justify-content-between">
                       @click=""
                     />
                   </a>
+                </template>
+              </pv-column>
+              <pv-column
+                  field="file_name"
+                  header="Delete"
+              >
+                <template #body="slotProps">
+                  <pv-button
+                      label="Delete"
+                      icon="pi pi-trash"
+                      class="mr-2"
+                      severity="danger"
+                      rounded
+                      @click="deleteDocument(slotProps.data.id, slotProps.data.informationGroup_id, slotProps.data.file_name)"
+                  />
                 </template>
               </pv-column>
             </pv-data-table>

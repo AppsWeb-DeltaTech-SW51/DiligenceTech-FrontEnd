@@ -2,6 +2,7 @@
 import {PendingProjectsApiService} from "../services/pending-projects-api.service.js";
 import {InvitationsApiService} from "../services/invitations-api.service.js";
 import {DueDiligenceProjectsApiService} from "../../due-diligence/services/due-diligence-projects-api.service.js";
+import { useToast } from "primevue/usetoast";
 
 export default {
   name: "pending-projects",
@@ -9,6 +10,7 @@ export default {
   data() {
     return {
       // Props
+      toast: useToast(),
       user_local: this.user,
       userTeam_local: this.userTeam,
       chosenTeam: false,
@@ -137,7 +139,7 @@ export default {
       this.newProjectDialog = true;
     },
     // Confirming
-    changeConfirm(value, slotProps_user, slotProps_project, team,data) {
+    changeConfirm(value, slotProps_project, team, data, slotProps_user = localStorage.getItem('id')) {
       // update on view
       this.projects.forEach(project => {
         if (project.id === slotProps_project) {
@@ -145,7 +147,6 @@ export default {
           if (team === 'Buy Side') {
             project.buy_confirms.forEach((confirmation, index) => {
               if (bool && confirmation === value) {
-                console.log('buy side');
                 project.buy_confirms[index] = !value;
                 bool = false;
               }
@@ -154,7 +155,6 @@ export default {
           else {
             project.sell_confirms.forEach((confirmation, index) => {
               if (bool && confirmation === value) {
-                console.log('sell side');
                 project.sell_confirms[index] = !value;
                 bool = false;
               }
@@ -162,7 +162,8 @@ export default {
           }
         }
       });
-      // update
+      // update on back-end
+      console.log(value, slotProps_project, slotProps_user, team, data);
       this.invitationsService.getInvitation(slotProps_project, slotProps_user)
           .then((response) => {
             response.data.forEach(invitation => {
@@ -172,20 +173,12 @@ export default {
                 team: team === 'Buy Side' ? 'buy_side' : 'sell_side',
                 confirmation: !value
               });
+              console.log('it did it');
             });
           });
       // check must be removed
       let date = new Date();
       if (data.sell_confirms.length === data.sell_confirms.filter(Boolean).length && data.buy_confirms.length === data.buy_confirms.filter(Boolean).length) {
-        // previously hurray message (reference for the team)
-        console.log({
-          id: slotProps_project,
-          name: data.name,
-          date_published: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
-          date_edited: `${date.getDay()}-${date.getMonth()}-${date.getFullYear()}`,
-          sell_side_agents_id: data.sell_ids,
-          buy_side_agents_id: data.buy_ids,
-        });
         // create usable project
         this.projectsService.create({
           id: slotProps_project,
@@ -196,16 +189,24 @@ export default {
           buy_side_agents_id: data.buy_ids,
         });
         // delete previous project
-        // from db
+        // from db (project)
         this.pendingProjectsService.delete(slotProps_project);
-        // from view
-        this.projects.forEach((projects, index) => {
-          if (this.projects.id === slotProps_project) {
+        // from db (invitations)
+        this.invitationsService.getByProject(slotProps_project)
+            .then((response) => {
+              console.log('the amount is: ' + response.data.length);
+              response.data.forEach(invitation => {
+                this.invitationsService.delete(invitation.id);
+              });
+            });
+        // delete from view
+        this.projects.forEach((project, index) => {
+          if (project.id === slotProps_project) {
             this.projects.splice(index,1);
           }
         });
-        // delete invitations
-        this.invitationsService.deleteInvitation(slotProps_project, slotProps_user);
+        // toast
+        this.toast.add({ severity: 'success', summary: 'Project has been created', detail: 'Confirmed project can now be observed at My Projects', life: 3000 });
       }
       // go back (if its removed then maybe you shouldn't
       return !value;
@@ -215,6 +216,7 @@ export default {
 </script>
 
 <template>
+  <pv-toast />
   <div>
     <div class="card">
       <pv-toolbar class="mb-4 border-2">
@@ -319,7 +321,7 @@ md:justify-content-between">
                 class="mr-2 p-button-outlined"
                 :severity="slotProps.data.teamConfirm ? 'danger' : 'success'"
                 rounded
-                @click="slotProps.data.teamConfirm = changeConfirm(slotProps.data.teamConfirm,this.$props.id,slotProps.data.id,slotProps.data.team,slotProps.data)"
+                @click="slotProps.data.teamConfirm = changeConfirm(slotProps.data.teamConfirm, slotProps.data.id, slotProps.data.team, slotProps.data)"
             />
           </template>
         </pv-column>
