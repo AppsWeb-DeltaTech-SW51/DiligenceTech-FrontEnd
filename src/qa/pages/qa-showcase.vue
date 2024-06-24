@@ -148,16 +148,16 @@ export default {
 <template>
   <div>
     <div class="card">
-      <pv-toolbar class="mb-4 border-2">
+      <pv-toolbar style="background-color:#131920" class="mb-4 border-2">
         <template #start>
-          <h3>Project Q&A</h3>
+          <h3 class="text-white">Project Q&A</h3>
         </template>
         <template #end>
-          <h3>{{htmlUserType(this.$props.user_type)}}</h3>
+          <h3 class="text-white">{{htmlUserType(this.$props.user_type)}}</h3>
         </template>
       </pv-toolbar>
 
-      <pv-toolbar class="mb-4 bg-gray-900">
+      <pv-toolbar style="background-color:#131920" class="mb-4 ">
         <template #start>
           <pv-dialog
               header="New Information Item"
@@ -179,6 +179,7 @@ export default {
             </template>
           </pv-dialog>
           <pv-button
+              style="background-color:#1b232d"
               label="New Question"
               icon="pi pi-plus"
               class="p-button-info mr-2"
@@ -214,9 +215,10 @@ NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
 md:justify-content-between">
             <h5 class="mb-2 md:m-0 p-as-md-center text-x1"></h5>
             <pv-button
+                style="background-color:#131920"
                 icon="pi pi-chevron-left"
                 class="mr-2"
-                severity="warning"
+                severity="success"
                 rounded
                 @click="returnToMyProjects"
             />
@@ -266,6 +268,7 @@ md:justify-content-between">
               </template>
             </pv-dialog>
             <pv-button
+                style="background-color:#131920"
                 icon="pi pi-chevron-right"
                 label="Go"
                 class="mr-2"

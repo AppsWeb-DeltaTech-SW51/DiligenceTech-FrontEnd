@@ -219,9 +219,9 @@ export default {
   <pv-toast />
   <div>
     <div class="card">
-      <pv-toolbar class="mb-4 border-2">
+      <pv-toolbar style="background-color:#131920" class="mb-4 border-2">
         <template #start>
-          <h3>My Pending Projects</h3>
+          <h3 class="text-white">My Pending Projects</h3>
         </template>
         <template #end>
         </template>
@@ -254,11 +254,12 @@ export default {
           <pv-button label="Create Pending Project" class="p-button-outlined" @click="newProject"></pv-button>
         </template>
       </pv-dialog>
-      <pv-toolbar class="mb-4 bg-gray-900">
+      <pv-toolbar style="background-color:#131920" class="mb-4 ">
         <template #start>
           <pv-button
+              style="background-color:#1b232d"
               label="New Project"
-              class="p-button-warning mr-2"
+              class="p-button-warning mr-2 text-white"
               @click="openNewProjectDialog"
           />
         </template>
