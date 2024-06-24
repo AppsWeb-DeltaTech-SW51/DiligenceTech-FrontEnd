@@ -43,7 +43,7 @@ export default {
 </script>
 
 <template>
-  <pv-toast /> <!-- Don't know if i can remove it -->
+  <pv-toast />
   <RouterView
   />
 </template>

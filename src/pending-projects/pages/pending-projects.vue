@@ -94,7 +94,7 @@ export default {
       //// self invitation
       this.invitationsService.create({
         user_id: localStorage.getItem('id'),
-        project_id: this.code.toLowerCase(),
+        project_id: this.code.toUpperCase(),
         "team": this.chosenTeam ? 'sell_side' : 'buy_side',
         "confirmation": true,
       });
@@ -109,8 +109,8 @@ export default {
       */
       //// friend invitation
       this.invitationsService.create({
-        user_id: this.opponent,
-        project_id: this.code.toLowerCase(),
+        user_id: this.opponent.toLowerCase(),
+        project_id: this.code.toUpperCase(),
         "team": this.chosenTeam ? 'buy_side' : 'sell_side',
         "confirmation": false,
       });

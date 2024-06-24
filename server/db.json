@@ -45,25 +45,25 @@
       "id": 19
     },
     {
-      "user_id": "u202218227",
-      "project_id": "PJ0023",
+      "user_id": "u202111654",
+      "project_id": "pj1117",
       "team": "sell_side",
-      "confirmation": false,
-      "id": 23
+      "confirmation": true,
+      "id": 25
     },
     {
-      "user_id": "u202218226",
-      "project_id": "PJ0023",
+      "user_id": "u202218227",
+      "project_id": "pj1117",
       "team": "buy_side",
       "confirmation": false,
-      "id": 24
+      "id": 26
     }
   ],
   "pendingProjects": [
     {
-      "id": "PJ0023",
-      "name": "Project Duell",
-      "date_published": "3-4-2024"
+      "id": "PJ1117",
+      "name": "Project Mary",
+      "date_published": "1-5-2024"
     }
   ],
   "dueDiligenceProjects": [
@@ -185,6 +185,30 @@
       ],
       "buy_side_agents_id": [
         "u202111654"
+      ]
+    },
+    {
+      "id": "PJ2222",
+      "name": "Project Luis",
+      "date_published": "1-5-2024",
+      "date_edited": "1-5-2024",
+      "sell_side_agents_id": [
+        "u202111654"
+      ],
+      "buy_side_agents_id": [
+        "u202218227"
+      ]
+    },
+    {
+      "id": "PJ9999",
+      "name": "Project Angel UWU",
+      "date_published": "1-5-2024",
+      "date_edited": "1-5-2024",
+      "sell_side_agents_id": [
+        "u202111654"
+      ],
+      "buy_side_agents_id": [
+        "u202218227"
       ]
     }
   ],
@@ -352,8 +376,10 @@
       "name": "Compras de Productos IT del 2003-2023.",
       "parent": "IT",
       "buy_status": "None",
-      "sell_status": "None",
-      "id": 13
+      "sell_status": "Done",
+      "id": 13,
+      "children": [],
+      "has_children": false
     },
     {
       "project_id": "PJ2122",
@@ -473,6 +499,159 @@
       "buy_status": "None",
       "sell_status": "None",
       "id": 26
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "Legal",
+      "name": "Legal",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 27
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "Tax",
+      "name": "Tax",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 28
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "Financial",
+      "name": "Financial",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 29
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "Operational",
+      "name": "Operational",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 30
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "1",
+      "name": "Primero reques.",
+      "parent": "Legal",
+      "buy_status": "None",
+      "sell_status": "Done",
+      "id": 31,
+      "children": [
+        {
+          "project_id": "PJ2222",
+          "informationGroup_id": 31,
+          "file_name": "pregunta4.PNG",
+          "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta4.PNG?alt=media&token=ea4e8fbf-ec90-40a5-ba55-4d8e80b26890"
+        },
+        {
+          "project_id": "PJ2222",
+          "informationGroup_id": 31,
+          "file_name": "pregunta3.PNG",
+          "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta3.PNG?alt=media&token=3a721db3-d3d7-4f48-8f52-5c31b75ae535"
+        },
+        {
+          "project_id": "PJ2222",
+          "informationGroup_id": 31,
+          "file_name": "pregunta2.PNG",
+          "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta2.PNG?alt=media&token=658055dd-8acd-43c0-907f-dd62158be056"
+        },
+        {
+          "project_id": "PJ2222",
+          "informationGroup_id": 31,
+          "file_name": "pregunta.PNG",
+          "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta.PNG?alt=media&token=873237b4-34fb-4dd0-a1f7-fc6a914eb839"
+        }
+      ],
+      "has_children": false
+    },
+    {
+      "project_id": "PJ2222",
+      "identifier": "2",
+      "name": "Segundos reques.",
+      "parent": "Legal",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 32
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "XD",
+      "name": "XD",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 33
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "uwu",
+      "name": "uwu",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 34
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "lol",
+      "name": "lol",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 35
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": ":v",
+      "name": ":v",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 36
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "jiji",
+      "name": "jiji",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 37
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "jaja",
+      "name": "jaja",
+      "parent": null,
+      "buy_status": null,
+      "sell_status": null,
+      "id": 38
+    },
+    {
+      "project_id": "PJ9999",
+      "identifier": "1",
+      "name": "ewe",
+      "parent": "uwu",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 39
+    },
+    {
+      "project_id": "PJ2122",
+      "identifier": "7",
+      "name": "lol",
+      "parent": "Financiero",
+      "buy_status": "None",
+      "sell_status": "None",
+      "id": 40
     }
   ],
   "document": [
@@ -485,17 +664,66 @@
     },
     {
       "project_id": "PJ2122",
-      "informationGroup_id": 3,
-      "file_name": "proof-university.png",
-      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F3%2Fproof-university.png?alt=media&token=702f2230-18c6-4d90-acd0-c540e1c5b76d",
-      "id": 2
-    },
-    {
-      "project_id": "PJ2122",
       "informationGroup_id": 18,
       "file_name": "pregunta4.PNG",
       "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F18%2Fpregunta4.PNG?alt=media&token=c3446a80-7f70-4381-b3dc-5dfbe54ea7b5",
       "id": 3
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": 4,
+      "file_name": "Round Robin 1.xlsx",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F4%2FRound%20Robin%201.xlsx?alt=media&token=bdf298a7-847c-4239-9511-4ea5119cd04b",
+      "id": 4
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": 13,
+      "file_name": "pregunta4.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F13%2Fpregunta4.PNG?alt=media&token=19c86d79-1ae2-46bd-8279-7f83b76add4e",
+      "id": 5
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": 13,
+      "file_name": "pregunta3.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F13%2Fpregunta3.PNG?alt=media&token=65e12721-c5a9-4da8-9967-2516f5e6e9ba",
+      "id": 6
+    },
+    {
+      "project_id": "PJ2122",
+      "informationGroup_id": 13,
+      "file_name": "pregunta2.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2122%2F13%2Fpregunta2.PNG?alt=media&token=11c896ae-995f-4269-a365-1c5013b29597",
+      "id": 7
+    },
+    {
+      "project_id": "PJ2222",
+      "informationGroup_id": 31,
+      "file_name": "pregunta4.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta4.PNG?alt=media&token=ea4e8fbf-ec90-40a5-ba55-4d8e80b26890",
+      "id": 8
+    },
+    {
+      "project_id": "PJ2222",
+      "informationGroup_id": 31,
+      "file_name": "pregunta3.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta3.PNG?alt=media&token=3a721db3-d3d7-4f48-8f52-5c31b75ae535",
+      "id": 9
+    },
+    {
+      "project_id": "PJ2222",
+      "informationGroup_id": 31,
+      "file_name": "pregunta2.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta2.PNG?alt=media&token=658055dd-8acd-43c0-907f-dd62158be056",
+      "id": 10
+    },
+    {
+      "project_id": "PJ2222",
+      "informationGroup_id": 31,
+      "file_name": "pregunta.PNG",
+      "file_url": "https://firebasestorage.googleapis.com/v0/b/diligencetech-e4fb4.appspot.com/o/uploads%2FPJ2222%2F31%2Fpregunta.PNG?alt=media&token=873237b4-34fb-4dd0-a1f7-fc6a914eb839",
+      "id": 11
     }
   ],
   "questions": [
