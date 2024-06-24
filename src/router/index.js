@@ -53,7 +53,7 @@ const router = createRouter({
         },
         {
             path: '/',
-            redirect: 'login'
+            redirect: 'due_diligence'
         },
     ]
 })

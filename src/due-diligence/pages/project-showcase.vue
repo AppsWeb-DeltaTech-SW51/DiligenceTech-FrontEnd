@@ -74,7 +74,7 @@ export default {
                     this.informationGroups_focused.push(informationGroup);
                     this.informationGroups_id.push(informationGroup.identifier);
                     // include documents
-                    this.documentsService.getByInformationItem(projectId, informationGroup.identifier)
+                    this.documentsService.getByInformationItem(projectId, informationGroup.id)
                         .then((response) => {
                           informationGroup.children = response.data;
                         });
@@ -107,6 +107,12 @@ export default {
     },
     // Firebase
     upload: function() {
+      // Find id to use through informationGroups
+      this.informationGroups_focused.forEach((informationGroup) => {
+        if (informationGroup.identifier === this.newDocuments.informationGroup_id) {
+          this.newDocuments.informationGroup_id = informationGroup.id;
+        }
+      });
       // Normal Upload
       const storageRef = ref(storage, 'vue/' + this.$refs.myFile.files[0].name);
       uploadBytes(storageRef, this.$refs.myFile.files[0])
