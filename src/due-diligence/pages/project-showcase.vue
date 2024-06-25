@@ -559,7 +559,7 @@ md:justify-content-between">
             <h5 class="mb-2 md:m-0 p-as-md-center text-x1">{{this.$props.project_id}}</h5>
             <pv-button
                 style="background-color:#131920"
-                icon="pi pi-chevron-right"
+                icon="pi pi-chevron-left"
                 class="mr-2"
                 severity="success"
                 rounded
