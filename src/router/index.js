@@ -13,6 +13,7 @@ const router = createRouter({
         },
         {
             path: '/',
+            redirect: '/workspace',
             name: 'workspace',
             component: () => import('../views/workspace.view.vue'),
             props: true,
@@ -50,10 +51,6 @@ const router = createRouter({
                     name: 'settings_project',
                 },
             ],
-        },
-        {
-            path: '/',
-            redirect: 'due_diligence'
         },
     ]
 })
